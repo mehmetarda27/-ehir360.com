@@ -1,8 +1,8 @@
-# Şehir360
+# Sehir360
 
-Mevcut tasarim korunarak veri katmani Google Places API New uzerinden canli isletme verisi cekecek sekilde duzenlendi. Sahte isletme, random telefon, random adres veya demo isletme uretilmez.
+Mevcut tasarim korunarak frontend ve API tek Vercel deploy icinde calisacak hale getirildi. Sistem sahte isletme uretmez; mevcut `data/db.json` kayitlarini bootstrap kaynagi olarak kullanir.
 
-## Calistirma
+## Lokal calistirma
 
 ```bash
 npm install
@@ -10,73 +10,57 @@ copy .env.example .env
 npm run dev
 ```
 
-- API: `http://127.0.0.1:4000`
-- Client: Vite terminalinde yazan adres, genelde `http://127.0.0.1:5173`
+- Frontend API adresi varsayilan olarak `/api` relative path kullanir.
+- Lokal gelistirmede `npm run api` mevcut `data/db.json` dosyasini okur/yazar.
+- Vite terminalde verdigi lokal adresten acilir.
 
-## Google Places API New
+## Vercel production
 
-`.env` dosyasina Google Places API New anahtari ekleyin:
+Tek deploy hedefi Vercel'dir:
+
+- Frontend: Vite build cikisi.
+- API: `api/[...path].js` uzerinden Vercel serverless function.
+- SPA refresh: `vercel.json` tum frontend route'larini `index.html`e dusurur.
+- API route'lari: `/api/businesses`, `/api/categories`, `/api/auth/login` gibi ayni domain altinda calisir.
+
+Vercel dosya sistemi kalici yazma alani olmadigi icin production veri kaynagi Vercel Blob'dur. Vercel projesine Blob store baglayip `BLOB_READ_WRITE_TOKEN` env degerini tanimlayin. Ilk production okumada mevcut `data/db.json` Blob'a kopyalanir; sonraki admin ekleme/guncelleme/silme islemleri Blob'daki `sehir-paneli/db.json` kaydina yazilir.
+
+Gerekli env:
 
 ```bash
-GOOGLE_MAPS_API_KEY=google_api_keyiniz
+JWT_SECRET=guclu-production-secret
+BLOB_READ_WRITE_TOKEN=vercel-blob-token
+DB_BLOB_KEY=sehir-paneli/db.json
+ADMIN_EMAIL=admin@sehirpaneli.com
+ADMIN_PASSWORD=Admin123
+GOOGLE_MAPS_API_KEY=
 ```
-
-Anahtar yoksa sistem sahte veri uretmez. API yanitlarinda `googleEnabled=false` ve acik hata mesaji doner.
 
 ## Admin
 
-Ilk calistirmada sadece admin kullanicisi bootstrap edilir:
+Ilk calistirmada mevcut veritabaninda admin yoksa sadece admin kullanicisi bootstrap edilir:
 
 - Admin: `admin@sehirpaneli.com` / `Admin123`
 
-Bu degerleri `.env` ile degistirebilirsiniz:
-
-```bash
-ADMIN_EMAIL=admin@site.com
-ADMIN_PASSWORD=GucluSifre123
-```
-
-## Google Veri Guncelleme
-
-Tek kategori senkronizasyonu:
-
-```bash
-POST /api/google/places/sync
-Authorization: Bearer <admin_token>
-{
-  "city": "Mersin",
-  "category": "restaurants",
-  "force": false
-}
-```
-
-Tum kategori senkronizasyonu:
-
-```bash
-POST /api/google/places/sync-city
-Authorization: Bearer <admin_token>
-{
-  "city": "Mersin",
-  "force": false
-}
-```
-
-Sonuclar `data/db.json` icine kaydedilir. Tekrar eden aramalarda `data/google-cache.json` cache kullanilir.
+Bu degerleri `.env` veya Vercel environment variables ile degistirebilirsiniz.
 
 ## Endpointler
 
-- `GET /api/businesses?city=Mersin&category=restaurants&autofetch=1`
-- `GET /api/google/places/search?city=Mersin&category=restaurants`
-- `POST /api/google/places/sync`
-- `POST /api/google/places/sync-city`
-- `GET /api/google/places/details/:placeId`
+- `GET /api/health`
+- `GET /api/businesses`
+- `GET /api/businesses?category=restoranlar`
+- `GET /api/businesses/:idOrSlug`
+- `POST /api/businesses`
+- `PUT /api/businesses/:idOrSlug`
+- `DELETE /api/businesses/:idOrSlug`
 - `GET /api/categories`
-- `GET /api/cities`
-- `GET /api/admin/stats`
+- `POST /api/categories`
+- `PUT /api/categories/:idOrSlug`
+- `DELETE /api/categories/:idOrSlug`
 - `POST /api/auth/login`
 - `POST /api/auth/register`
 - `GET /api/auth/me`
 
 ## Not
 
-Google Places API New Text Search ve Place Details isteklerinde field mask kullanilir. API key sadece backend tarafinda okunur, frontend bundle icine yazilmaz.
+Google Places veya OSM senkronizasyonu anahtar/cache uygunsa gercek kaynaklardan veri ceker. Anahtar yoksa sistem sahte veri uretmez ve mevcut DB kayitlariyla calismaya devam eder.

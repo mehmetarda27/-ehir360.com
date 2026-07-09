@@ -35,22 +35,19 @@ import {
   Star,
   Store,
   Tags,
+  Trash2,
   Upload,
   Users,
   XCircle
 } from "lucide-react";
-import { businesses as seedBusinesses, campaigns, categories, cities, events, jobs, pharmacies, reviews } from "./data.js";
+import { businesses as seedBusinesses, campaigns, categories as seedCategories, cities as seedCities, events, jobs, pharmacies, reviews } from "./data.js";
 import "./styles.css";
 
 const CityContext = createContext(null);
 const AppDataContext = createContext(null);
-const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:4000/api";
+const API_BASE = (import.meta.env.VITE_API_BASE || "/api").replace(/\/$/, "");
 
-const defaultUsers = [
-  { role: "admin", name: "Yonetici", email: "admin@sehirpaneli.com", password: "Admin123" },
-  { role: "customer", name: "Demo Musteri", email: "musteri@sehirpaneli.com", password: "Musteri123" },
-  { role: "business", name: "Demo Restoran", email: "restoran@sehirpaneli.com", password: "Restoran123", packageType: "premium" }
-];
+const defaultUsers = [];
 
 const getStored = (key, fallback) => {
   try {
@@ -254,7 +251,7 @@ function CitySelect() {
       <section className="container section">
         <div className="section-head"><div><h2>Popüler şehirler</h2><p>Aktif ve yakında açılacak bölgeler</p></div><Badge tone="green">Canlı: Mersin</Badge></div>
         <div className="city-grid">
-          {cities.map((item) => (
+          {seedCities.map((item) => (
             <button className={`city-card ${item.active ? "active" : "muted"}`} key={item.id} onClick={() => item.active && choose(item.name)}>
               <img src={item.image} alt={`${item.name} şehir manzarası`} />
               <span>{item.active ? "Aktif şehir" : "Yakında"}</span>
@@ -270,9 +267,10 @@ function CitySelect() {
 
 function Home() {
   const { city } = useCity();
-  const { businesses } = useAppData();
+  const { businesses, categories } = useAppData();
   setMeta(`${city} Dijital Rehberi | Şehir360`, `${city} işletmeleri, kampanyaları, etkinlikleri, nöbetçi eczaneleri ve iş ilanları.`);
-  const featured = businesses.filter((b) => b.featured).slice(0, 3);
+  const featuredPool = businesses.filter((b) => b.featured || b.isSponsored || b.sponsored || b.verified || b.isVerified);
+  const featured = (featuredPool.length ? featuredPool : businesses).slice(0, 3);
   return (
     <PageShell>
       <section className="hero">
@@ -308,10 +306,8 @@ function Home() {
 }
 
 function AppDataProvider({ children }) {
-  const [businessList, setBusinessList] = useState(() => {
-    const saved = getStored("sehir-paneli-businesses", []);
-    return saved;
-  });
+  const [businessList, setBusinessList] = useState(seedBusinesses);
+  const [categoryList, setCategoryList] = useState(seedCategories);
   const [users, setUsers] = useState(() => {
     const saved = getStored("sehir-paneli-users", []);
     return [...defaultUsers, ...saved.filter((item) => !defaultUsers.some((user) => user.email === item.email))];
@@ -326,9 +322,20 @@ function AppDataProvider({ children }) {
     try {
       const separator = query ? `${query}&` : "?";
       const data = await apiFetch(`/businesses${separator}autofetch=1`);
-      setBusinessList(data.businesses || []);
-    } catch {
-      // API kapaliysa seed/local veriler ekranda kalir.
+      if (!Array.isArray(data.businesses)) throw new Error("Isletme API yaniti gecersiz");
+      setBusinessList(data.businesses);
+    } catch (error) {
+      console.warn("Isletme verisi API'den alinamadi, fallback veri korunuyor.", error);
+    }
+  };
+
+  const refreshCategories = async () => {
+    try {
+      const data = await apiFetch("/categories");
+      if (!Array.isArray(data.categories)) throw new Error("Kategori API yaniti gecersiz");
+      setCategoryList(data.categories);
+    } catch (error) {
+      console.warn("Kategori verisi API'den alinamadi, fallback veri korunuyor.", error);
     }
   };
 
@@ -343,6 +350,7 @@ function AppDataProvider({ children }) {
   };
 
   useEffect(() => {
+    refreshCategories();
     refreshBusinesses();
     refreshNotifications();
   }, []);
@@ -368,90 +376,64 @@ function AppDataProvider({ children }) {
         body: JSON.stringify({ name: formValues.businessName || formValues.name, ...formValues })
       });
       setBusinessList((current) => [data.business, ...current.filter((item) => item.id !== data.business.id)]);
+      await refreshCategories();
       await refreshNotifications();
       return data.business;
-    } catch {
-      // API kapaliysa local fallback devreye girer.
+    } catch (error) {
+      throw error;
     }
-    const name = formValues.businessName || formValues.name || "Yeni Restoran";
-    const category = formValues.category || "Restoran";
-    const categorySlug = category.toLowerCase().includes("sağ") ? "saglik" : category.toLowerCase().includes("güz") ? "guzellik" : category.toLowerCase().includes("hiz") ? "hizmet" : "yeme-icme";
-    const business = {
-      id: `custom-${Date.now()}`,
-      slug: slugify(name),
-      name,
-      city: formValues.city || "Mersin",
-      district: formValues.district || "Merkez",
-      category,
-      categorySlug,
-      rating: 5,
-      reviewCount: 0,
-      open: true,
-      verified: formValues.status === "Onaylı",
-      sponsored: formValues.packageType === "premium" || formValues.package === "Premium",
-      featured: true,
-      packageType: formValues.packageType || formValues.package || "free",
-      image: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=900&q=82",
-      cover: "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1400&q=82",
-      logo: "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=300&q=82",
-      address: formValues.address || `${formValues.city || "Mersin"} merkez`,
-      phone: formValues.phone || "+90 324 000 00 00",
-      whatsapp: "903240000000",
-      website: "https://yenirestoran.example.com",
-      description: `${name}, Şehir360'ne yeni eklenen yerel işletmelerden biri.`,
-      services: ["Paket servis", "Rezervasyon", "Aile alanı", "Kredi kartı"],
-      hours: [
-        { day: "Pazartesi", time: "09:00 - 23:00" },
-        { day: "Salı", time: "09:00 - 23:00" },
-        { day: "Çarşamba", time: "09:00 - 23:00" },
-        { day: "Perşembe", time: "09:00 - 23:00" },
-        { day: "Cuma", time: "09:00 - 00:00" },
-        { day: "Cumartesi", time: "10:00 - 00:00" },
-        { day: "Pazar", time: "10:00 - 22:00" }
-      ],
-      gallery: [
-        "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=900&q=82",
-        "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=82"
-      ],
-      reviews: []
-    };
-    setBusinessList((current) => {
-      const next = [business, ...current];
-      localStorage.setItem("sehir-paneli-businesses", JSON.stringify(next.filter((item) => item.id.startsWith("custom-"))));
-      return next;
-    });
-    pushNotification({
-      title: "Yeni restoran eklendi",
-      text: `${name} yayına alındı. Denemek ister misin?`,
-      to: `/business/${business.slug}`
-    });
-    return business;
   };
 
   const updateBusiness = async (id, updates) => {
     try {
       const data = await apiFetch(`/businesses/${id}`, { method: "PUT", body: JSON.stringify(updates) });
       setBusinessList((current) => current.map((item) => item.id === id ? data.business : item));
+      await refreshCategories();
       return data.business;
-    } catch {
-      // API kapaliysa local fallback devreye girer.
+    } catch (error) {
+      throw error;
     }
-    setBusinessList((current) => {
-      const next = current.map((item) => item.id === id ? { ...item, ...updates } : item);
-      localStorage.setItem("sehir-paneli-businesses", JSON.stringify(next.filter((item) => item.id.startsWith("custom-"))));
-      return next;
-    });
+  };
+
+  const deleteBusiness = async (id) => {
+    await apiFetch(`/businesses/${id}`, { method: "DELETE" });
+    setBusinessList((current) => current.filter((item) => item.id !== id && item.slug !== id));
+    await refreshCategories();
+  };
+
+  const addCategory = async (values) => {
+    const data = await apiFetch("/categories", { method: "POST", body: JSON.stringify(values) });
+    await refreshCategories();
+    return data.category;
+  };
+
+  const updateCategory = async (id, values) => {
+    const data = await apiFetch(`/categories/${id}`, { method: "PUT", body: JSON.stringify(values) });
+    await refreshCategories();
+    await refreshBusinesses();
+    return data.category;
+  };
+
+  const deleteCategory = async (id) => {
+    await apiFetch(`/categories/${id}`, { method: "DELETE" });
+    await refreshCategories();
   };
 
   const value = useMemo(() => ({
     businesses: businessList,
+    categories: categoryList,
     users,
     registerUser: (user) => persistUsers([...users, user]),
     addBusiness,
     updateBusiness,
+    deleteBusiness,
+    addCategory,
+    updateCategory,
+    deleteCategory,
     notifications,
     pushNotification,
     refreshBusinesses,
+    refreshCategories,
     refreshNotifications,
     markNotificationsRead: async () => {
       try {
@@ -463,7 +445,7 @@ function AppDataProvider({ children }) {
       localStorage.setItem("sehir-paneli-notifications", JSON.stringify(next));
       setNotifications(next);
     }
-  }), [businessList, users, notifications]);
+  }), [businessList, categoryList, users, notifications]);
 
   return <AppDataContext.Provider value={value}>{children}</AppDataContext.Provider>;
 }
@@ -763,7 +745,7 @@ function SearchBar() {
     <form className="search-panel" onSubmit={(event) => { event.preventDefault(); navigate("/categories"); }}>
       <Search />
       <input placeholder="İşletme, kategori veya hizmet arayın..." />
-      <select value={city} onChange={(event) => setCity(event.target.value)}>{cities.map((item) => <option key={item.id}>{item.name}</option>)}</select>
+      <select value={city} onChange={(event) => setCity(event.target.value)}>{seedCities.map((item) => <option key={item.id}>{item.name}</option>)}</select>
       <button className="btn btn-primary">Ara</button>
     </form>
   );
@@ -780,6 +762,7 @@ function QuickLinks() {
 }
 
 function CategoryStrip() {
+  const { categories } = useAppData();
   return (
     <section className="section section-white">
       <div className="container">
@@ -828,10 +811,22 @@ function BusinessCard({ business }) {
 
 function CategoriesPage() {
   const { city } = useCity();
-  const { businesses } = useAppData();
+  const { businesses, categories } = useAppData();
   const { slug } = useParams();
-  const category = categories.find((c) => c.slug === slug);
-  const filtered = category ? businesses.filter((b) => b.categorySlug === slug) : businesses;
+  const [query, setQuery] = useState("");
+  const [onlyVerified, setOnlyVerified] = useState(false);
+  const [onlyOpen, setOnlyOpen] = useState(false);
+  const [onlySponsored, setOnlySponsored] = useState(false);
+  const category = categories.find((c) => c.slug === slug || c.id === slug);
+  const normalizedQuery = query.trim() ? slugify(query) : "";
+  const filtered = businesses.filter((business) => {
+    const matchesCategory = !category || business.categorySlug === category.slug || business.categoryId === category.id || slugify(business.category) === slugify(category.name);
+    const matchesQuery = !normalizedQuery || slugify(`${business.name} ${business.category} ${business.district} ${business.address}`).includes(normalizedQuery);
+    const matchesVerified = !onlyVerified || business.verified || business.isVerified;
+    const matchesOpen = !onlyOpen || business.open || business.isOpen;
+    const matchesSponsored = !onlySponsored || business.sponsored || business.isSponsored;
+    return matchesCategory && matchesQuery && matchesVerified && matchesOpen && matchesSponsored;
+  });
   setMeta(`${category ? category.name : "Kategoriler"} | Şehir360`, `${city} işletme listeleme ve kategori keşfi.`);
   return (
     <PageShell>
@@ -840,14 +835,14 @@ function CategoriesPage() {
         <div className="listing-layout">
           <aside className="filter-panel">
             <h3>Filtrele</h3>
-            <label><input type="checkbox" defaultChecked /> Doğrulanmış</label>
-            <label><input type="checkbox" /> Şu an açık</label>
-            <label><input type="checkbox" /> Sponsorlu</label>
-            <label><input type="radio" name="rating" defaultChecked /> 4.0+ puan</label>
-            <button className="btn btn-primary">Filtreleri Uygula</button>
+            <label><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="İşletme ara" /></label>
+            <label><input type="checkbox" checked={onlyVerified} onChange={(event) => setOnlyVerified(event.target.checked)} /> Doğrulanmış</label>
+            <label><input type="checkbox" checked={onlyOpen} onChange={(event) => setOnlyOpen(event.target.checked)} /> Şu an açık</label>
+            <label><input type="checkbox" checked={onlySponsored} onChange={(event) => setOnlySponsored(event.target.checked)} /> Sponsorlu</label>
+            <button className="btn btn-primary" type="button" onClick={() => { setQuery(""); setOnlyVerified(false); setOnlyOpen(false); setOnlySponsored(false); }}>Filtreleri Temizle</button>
           </aside>
           <section>
-            <div className="section-head"><div><h1>{category ? `${category.name} işletmeleri` : `${city} işletmeleri`}</h1><p>{filtered.length} gerçekçi demo kayıt listeleniyor.</p></div><select><option>En popüler</option><option>En yüksek puan</option><option>En yeni</option></select></div>
+            <div className="section-head"><div><h1>{category ? `${category.name} işletmeleri` : `${city} işletmeleri`}</h1><p>{filtered.length} kayıt listeleniyor.</p></div><select><option>En popüler</option><option>En yüksek puan</option><option>En yeni</option></select></div>
             {filtered.length ? <div className="business-grid">{filtered.map((item) => <BusinessCard business={item} key={item.id} />)}</div> : <EmptyState title="Kayıt bulunamadı" text="Bu filtrelerde işletme yok. Filtreleri temizleyip tekrar deneyin." />}
           </section>
         </div>
@@ -859,7 +854,28 @@ function CategoriesPage() {
 function BusinessDetail() {
   const { slug } = useParams();
   const { businesses } = useAppData();
-  const business = businesses.find((b) => b.slug === slug) || businesses[0];
+  const [remoteBusiness, setRemoteBusiness] = useState(null);
+  const [notFound, setNotFound] = useState(false);
+  const business = remoteBusiness || businesses.find((b) => b.slug === slug || b.id === slug);
+
+  useEffect(() => {
+    setNotFound(false);
+    apiFetch(`/businesses/${slug}`)
+      .then((data) => setRemoteBusiness(data.business))
+      .catch(() => setNotFound(true));
+  }, [slug]);
+
+  if (!business && !notFound) {
+    return <PageShell><section className="container page-top"><Loading /></section></PageShell>;
+  }
+
+  if (!business) {
+    return <PageShell><section className="container page-top"><EmptyState title="İşletme bulunamadı" text="Bu işletme kaydı veritabanında bulunamadı." /></section></PageShell>;
+  }
+
+  const services = business.services?.length ? business.services : [];
+  const hours = business.hours?.length ? business.hours : business.openingHours?.map((line) => ({ day: line.split(":")[0], time: line.split(":").slice(1).join(":").trim() })) || [];
+  const gallery = business.gallery?.length ? business.gallery : business.photos || [];
   setMeta(`${business.name} | Şehir360`, `${business.name} adres, telefon, yorumlar, kampanyalar ve çalışma saatleri.`);
   return (
     <PageShell>
@@ -882,14 +898,14 @@ function BusinessDetail() {
         <div className="detail-grid">
           <div className="stack">
             <Panel title="Hakkında"><p>{business.description}</p></Panel>
-            <Panel title="Hizmetler / Menü"><div className="service-grid">{business.services.map((s) => <span key={s}><CheckCircle2 /> {s}</span>)}</div></Panel>
+            <Panel title="Hizmetler / Menü"><div className="service-grid">{services.map((s) => <span key={s}><CheckCircle2 /> {s}</span>)}</div></Panel>
             <Panel title="Kampanyalar"><div className="campaign-list">{campaigns.filter((c) => c.businessId === business.id).map((c) => <div key={c.id}><Badge tone="gold">{c.discount}</Badge><b>{c.title}</b><p>{c.description}</p></div>)}</div></Panel>
-            <Panel title="Yorumlar"><div className="review-list">{business.reviews.map((r) => <ReviewItem key={r.id} review={r} />)}</div></Panel>
+            <Panel title="Yorumlar"><div className="review-list">{(business.reviews || []).map((r) => <ReviewItem key={r.id} review={r} />)}</div></Panel>
           </div>
           <aside className="stack">
-            <Panel title="Çalışma saatleri">{business.hours.map((h) => <div className="hours-row" key={h.day}><span>{h.day}</span><b>{h.time}</b></div>)}</Panel>
-            <Panel title="İletişim"><p><MapPin /> {business.address}</p><p><Phone /> {business.phone}</p><p><ExternalLink /> {business.website.replace("https://", "")}</p></Panel>
-            <Panel title="Galeri"><div className="gallery-grid">{business.gallery.map((img) => <img key={img} src={img} alt={`${business.name} galeri`} />)}</div></Panel>
+            <Panel title="Çalışma saatleri">{hours.map((h) => <div className="hours-row" key={`${h.day}-${h.time}`}><span>{h.day}</span><b>{h.time}</b></div>)}</Panel>
+            <Panel title="İletişim"><p><MapPin /> {business.address}</p><p><Phone /> {business.phone}</p><p><ExternalLink /> {business.website ? business.website.replace("https://", "") : "-"}</p></Panel>
+            <Panel title="Galeri"><div className="gallery-grid">{gallery.map((img) => <img key={img} src={img} alt={`${business.name} galeri`} />)}</div></Panel>
           </aside>
         </div>
       </section>
@@ -945,7 +961,7 @@ function AdminPanel() {
 function AdminPanelFixed() {
   const session = getSession();
   const navigate = useNavigate();
-  const { businesses, addBusiness, updateBusiness, pushNotification } = useAppData();
+  const { businesses, categories, addBusiness, updateBusiness, deleteBusiness, addCategory, updateCategory, deleteCategory, pushNotification } = useAppData();
   const [active, setActive] = useState("Genel Bakis");
   const [message, setMessage] = useState("");
   if (session?.role !== "admin") return <Navigate to="/login" replace />;
@@ -957,18 +973,22 @@ function AdminPanelFixed() {
   const createBusiness = async (event) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const business = await addBusiness({
-      businessName: String(form.get("businessName") || "Yeni Restoran"),
-      category: String(form.get("category") || "Restoran"),
-      city: String(form.get("city") || "Mersin"),
-      district: String(form.get("district") || "Merkez"),
-      phone: String(form.get("phone") || ""),
-      packageType: String(form.get("packageType") || "free"),
-      status: String(form.get("status") || "Beklemede")
-    });
-    pushNotification({ title: "Yeni restoran", text: `${business.name} ana sayfaya eklendi.`, to: `/business/${business.slug}` });
-    setMessage(`${business.name} olusturuldu. Ana sayfaya yonlendiriliyorsunuz.`);
-    window.setTimeout(() => navigate("/home"), 650);
+    try {
+      const business = await addBusiness({
+        businessName: String(form.get("businessName") || "").trim(),
+        categoryId: String(form.get("categoryId") || ""),
+        city: String(form.get("city") || "Mersin"),
+        district: String(form.get("district") || ""),
+        phone: String(form.get("phone") || ""),
+        packageType: String(form.get("packageType") || "free"),
+        status: String(form.get("status") || "Beklemede")
+      });
+      pushNotification({ title: "Yeni isletme", text: `${business.name} ana sayfaya eklendi.`, to: `/business/${business.slug}` });
+      setMessage(`${business.name} olusturuldu ve veritabanina kaydedildi.`);
+      event.currentTarget.reset();
+    } catch (error) {
+      setMessage(error.message || "Isletme kaydedilemedi.");
+    }
   };
 
   const approve = async (business) => {
@@ -980,6 +1000,51 @@ function AdminPanelFixed() {
   const reject = async (business) => {
     await updateBusiness(business.id, { verified: false, approved: false, open: false });
     setMessage(`${business.name} beklemeye alindi.`);
+  };
+
+  const removeBusiness = async (business) => {
+    try {
+      await deleteBusiness(business.id);
+      setMessage(`${business.name} silindi.`);
+    } catch (error) {
+      setMessage(error.message || "Isletme silinemedi.");
+    }
+  };
+
+  const createCategory = async (event) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    try {
+      const category = await addCategory({
+        name: String(form.get("name") || "").trim(),
+        slug: String(form.get("slug") || "").trim(),
+        icon: String(form.get("icon") || "📍")
+      });
+      setMessage(`${category.name} kategorisi eklendi.`);
+      event.currentTarget.reset();
+    } catch (error) {
+      setMessage(error.message || "Kategori kaydedilemedi.");
+    }
+  };
+
+  const renameCategory = async (category) => {
+    const nextName = window.prompt("Kategori adi", category.name);
+    if (!nextName || nextName === category.name) return;
+    try {
+      const updated = await updateCategory(category.id, { name: nextName });
+      setMessage(`${updated.name} kategorisi guncellendi.`);
+    } catch (error) {
+      setMessage(error.message || "Kategori guncellenemedi.");
+    }
+  };
+
+  const removeCategory = async (category) => {
+    try {
+      await deleteCategory(category.id);
+      setMessage(`${category.name} kategorisi silindi.`);
+    } catch (error) {
+      setMessage(error.message || "Kategori silinemedi.");
+    }
   };
 
   return (
@@ -1008,7 +1073,7 @@ function AdminPanelFixed() {
                     <tr key={b.id}>
                       <td>{b.name}</td><td>{b.category}</td><td>{b.district}</td>
                       <td><Badge tone={b.verified ? "green" : "gold"}>{b.verified ? "Onayli" : "Beklemede"}</Badge></td>
-                      <td><button type="button" onClick={() => approve(b)}><CheckCircle2 /></button><button type="button" onClick={() => reject(b)}><XCircle /></button><Link to={`/business/${b.slug}`}><Eye /></Link></td>
+                      <td><button type="button" onClick={() => approve(b)}><CheckCircle2 /></button><button type="button" onClick={() => reject(b)}><XCircle /></button><button type="button" onClick={() => removeBusiness(b)}><Trash2 /></button><Link to={`/business/${b.slug}`}><Eye /></Link></td>
                     </tr>
                   ))}</tbody>
                 </table>
@@ -1020,7 +1085,7 @@ function AdminPanelFixed() {
           <Panel title="Yeni Isletme Ekleme">
             <form className="form-grid" onSubmit={createBusiness}>
               <label>Isletme adi<input name="businessName" required placeholder="Yeni Restoran" /></label>
-              <label>Kategori<select name="category"><option>Restoran</option><option>Cafe & Kahve</option><option>Saglik</option><option>Guzellik</option><option>Hizmet</option></select></label>
+              <label>Kategori<select name="categoryId">{categories.map((category) => <option value={category.id} key={category.id}>{category.name}</option>)}</select></label>
               <label>Sehir<input name="city" defaultValue="Mersin" /></label>
               <label>Ilce<input name="district" defaultValue="Merkez" /></label>
               <label>Telefon<input name="phone" placeholder="+90 324 000 00 00" /></label>
@@ -1030,7 +1095,30 @@ function AdminPanelFixed() {
             </form>
           </Panel>
         )}
-        {!["Genel Bakis", "Isletme Listesi", "Onay Bekleyenler", "Yeni Isletme Ekle"].includes(active) && (
+        {active === "Kategori Yonetimi" && (
+          <Panel title="Kategori Yonetimi">
+            <form className="form-grid" onSubmit={createCategory}>
+              <label>Kategori adi<input name="name" required placeholder="Kategori adi" /></label>
+              <label>Slug<input name="slug" placeholder="bos birakilirsa otomatik" /></label>
+              <label>Ikon<input name="icon" placeholder="📍" /></label>
+              <button className="btn btn-primary" type="submit">Kategori Ekle</button>
+            </form>
+            <div className="table-wrap">
+              <table>
+                <thead><tr><th>Kategori</th><th>Slug</th><th>Kayit</th><th>Islem</th></tr></thead>
+                <tbody>{categories.map((category) => (
+                  <tr key={category.id}>
+                    <td>{category.name}</td>
+                    <td>{category.slug}</td>
+                    <td>{category.count || 0}</td>
+                    <td><button type="button" onClick={() => renameCategory(category)}><Edit3 /></button><button type="button" onClick={() => removeCategory(category)}><XCircle /></button></td>
+                  </tr>
+                ))}</tbody>
+              </table>
+            </div>
+          </Panel>
+        )}
+        {!["Genel Bakis", "Isletme Listesi", "Onay Bekleyenler", "Yeni Isletme Ekle", "Kategori Yonetimi"].includes(active) && (
           <Panel title={active}>
             <div className="manage-grid">
               {["Yeni kayit", "Duzenle", "Yayina al", "Raporla"].map((item) => <button type="button" key={item} onClick={() => setMessage(`${active}: ${item} islemi calisti.`)}><LayoutDashboard />{item}</button>)}
@@ -1067,7 +1155,7 @@ function BusinessPanel() {
 
 function BusinessPanelApi() {
   const session = getSession();
-  const { refreshBusinesses, refreshNotifications } = useAppData();
+  const { categories, refreshBusinesses, refreshNotifications } = useAppData();
   const [business, setBusiness] = useState(null);
   const [message, setMessage] = useState("");
 
@@ -1130,7 +1218,7 @@ function BusinessPanelApi() {
         <Panel title="Isletme Bilgilerini Duzenleme">
           <form className="form-grid" onSubmit={saveBusiness}>
             <label>Isletme adi<input name="name" required defaultValue={business?.name || ""} placeholder="Isletme adi" /></label>
-            <label>Kategori<select name="categoryId" defaultValue={business?.categoryId || "restaurants"}><option value="restaurants">Restoranlar</option><option value="cafes">Kafeler</option><option value="bakeries">Pastaneler</option><option value="hotels">Oteller</option><option value="hair-care">Kuaforler</option><option value="pharmacies">Eczaneler</option><option value="markets">Marketler</option><option value="gyms">Spor Salonlari</option><option value="car-repair">Oto Servisler</option><option value="dentists">Dis Klinikleri</option></select></label>
+            <label>Kategori<select name="categoryId" defaultValue={business?.categoryId || categories[0]?.id || "restaurants"}>{categories.map((category) => <option value={category.id} key={category.id}>{category.name}</option>)}</select></label>
             <label>Sehir<input name="city" defaultValue={business?.city || "Mersin"} /></label>
             <label>Ilce<input name="district" defaultValue={business?.district || ""} placeholder="Mezitli, Yenisehir..." /></label>
             <label>Adres<input name="address" defaultValue={business?.address || ""} placeholder="Adres" /></label>

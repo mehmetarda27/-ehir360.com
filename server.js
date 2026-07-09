@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { get as getBlob, put as putBlob } from "@vercel/blob";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataDir = path.join(__dirname, "data");
@@ -15,6 +16,7 @@ const dbFile = path.join(dataDir, "db.json");
 const googleCacheFile = path.join(dataDir, "google-cache.json");
 const osmCacheFile = path.join(dataDir, "osm-cache.json");
 const PORT = Number(process.env.API_PORT || 4000);
+const DB_BLOB_KEY = process.env.DB_BLOB_KEY || "sehir-paneli/db.json";
 const JWT_SECRET = process.env.JWT_SECRET || "local-dev-secret-change-me";
 const GOOGLE_KEY = process.env.GOOGLE_MAPS_API_KEY || "";
 const GOOGLE_CACHE_TTL_MS = Number(process.env.GOOGLE_CACHE_TTL_MS || 1000 * 60 * 60 * 24);
@@ -81,7 +83,36 @@ const slugify = (value) => String(value || "")
   .replace(/[^a-z0-9]+/g, "-")
   .replace(/^-+|-+$/g, "") || `kayit-${Date.now()}`;
 
+const isDbFile = (file) => path.resolve(file) === path.resolve(dbFile);
+const hasBlobStore = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN || (process.env.BLOB_STORE_ID && process.env.VERCEL_OIDC_TOKEN));
+let dbBlobNeedsBootstrap = false;
+
+async function streamToText(stream) {
+  const reader = stream.getReader();
+  const chunks = [];
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(Buffer.from(value));
+  }
+  return Buffer.concat(chunks).toString("utf8");
+}
+
 async function readJson(file, fallback) {
+  if (isDbFile(file) && hasBlobStore()) {
+    try {
+      const blob = await getBlob(DB_BLOB_KEY, { access: "private", useCache: false });
+      if (blob?.statusCode === 200 && blob.stream) {
+        return JSON.parse(await streamToText(blob.stream));
+      }
+      dbBlobNeedsBootstrap = true;
+    } catch (error) {
+      if (!["BlobNotFoundError", "BlobStoreNotFoundError"].includes(error?.name)) {
+        throw error;
+      }
+      dbBlobNeedsBootstrap = true;
+    }
+  }
   try {
     return JSON.parse(await fs.readFile(file, "utf8"));
   } catch {
@@ -90,6 +121,19 @@ async function readJson(file, fallback) {
 }
 
 async function writeJson(file, data) {
+  if (isDbFile(file) && hasBlobStore()) {
+    await putBlob(DB_BLOB_KEY, JSON.stringify(data, null, 2), {
+      access: "private",
+      allowOverwrite: true,
+      contentType: "application/json",
+      cacheControlMaxAge: 60
+    });
+    dbBlobNeedsBootstrap = false;
+    return;
+  }
+  if (isDbFile(file) && process.env.VERCEL) {
+    throw new Error("Vercel production icin BLOB_READ_WRITE_TOKEN veya Blob store baglantisi gerekli.");
+  }
   await fs.mkdir(path.dirname(file), { recursive: true });
   await fs.writeFile(file, JSON.stringify(data, null, 2));
 }
@@ -119,7 +163,9 @@ function normalizeDb(db) {
 }
 
 async function seedDb() {
-  const existing = normalizeDb(await readJson(dbFile, {}));
+  const rawDb = await readJson(dbFile, {});
+  const existing = normalizeDb(rawDb);
+  let shouldPersist = dbBlobNeedsBootstrap || !rawDb.users || !rawDb.businesses || !rawDb.categories;
   if (!existing.users.some((user) => user.role === "admin")) {
     existing.users.push({
       id: "u-admin",
@@ -129,8 +175,9 @@ async function seedDb() {
       passwordHash: bcrypt.hashSync(process.env.ADMIN_PASSWORD || "Admin123", 10),
       createdAt: now()
     });
+    shouldPersist = true;
   }
-  await writeJson(dbFile, existing);
+  if (shouldPersist) await writeJson(dbFile, existing);
   return existing;
 }
 
@@ -183,8 +230,20 @@ function createNotification(db, notification) {
   return record;
 }
 
-function categoryBySlugOrId(value) {
-  return categoryCatalog.find((item) => item.slug === value || item.id === value || item.googleType === value || item.name === value);
+function categoryBySlugOrId(value, categories = categoryCatalog) {
+  if (!value) return null;
+  const needle = String(value);
+  const needleLower = needle.toLowerCase();
+  const needleSlug = slugify(needle);
+  return categories.find((item) => (
+    String(item.id || "").toLowerCase() === needleLower ||
+    String(item.slug || "").toLowerCase() === needleLower ||
+    String(item.googleType || "").toLowerCase() === needleLower ||
+    String(item.name || "").toLowerCase() === needleLower ||
+    slugify(item.id) === needleSlug ||
+    slugify(item.slug) === needleSlug ||
+    slugify(item.name) === needleSlug
+  ));
 }
 
 function categoryForPlace(place, fallbackCategory) {
@@ -647,24 +706,32 @@ function parseCsv(text) {
   return data.map((values) => Object.fromEntries(headers.map((header, index) => [header, values[index] || ""])));
 }
 
-function filterBusinesses(rows, { city, category, q }) {
+function filterBusinesses(rows, { city, category, q }, categories = categoryCatalog) {
   let result = rows;
   if (city) result = result.filter((item) => item.city?.toLowerCase() === String(city).toLowerCase() || item.cityId === slugify(city));
   if (category) {
-    const resolved = categoryBySlugOrId(category);
-    result = result.filter((item) => item.categorySlug === category || item.categoryId === category || item.category === category || (resolved && item.categoryId === resolved.id));
+    const resolved = categoryBySlugOrId(category, categories);
+    const categorySlug = slugify(category);
+    result = result.filter((item) => (
+      slugify(item.categorySlug) === categorySlug ||
+      slugify(item.categoryId) === categorySlug ||
+      slugify(item.category) === categorySlug ||
+      (resolved && (item.categoryId === resolved.id || item.categorySlug === resolved.slug || slugify(item.category) === slugify(resolved.name)))
+    ));
   }
   if (q) {
-    const needle = String(q).toLowerCase();
-    result = result.filter((item) => `${item.name} ${item.category} ${item.district} ${item.address}`.toLowerCase().includes(needle));
+    const needle = slugify(q);
+    result = result.filter((item) => slugify(`${item.name} ${item.category} ${item.district} ${item.address}`).includes(needle));
   }
   return result;
 }
 
-function buildUserBusiness(input, ownerId, approved = false) {
+function buildUserBusiness(input, ownerId, approved = false, categories = categoryCatalog) {
   const name = input.name || input.businessName;
-  const category = categoryBySlugOrId(input.categoryId || input.categorySlug || input.category) || categoryCatalog[0];
+  const category = categoryBySlugOrId(input.categoryId || input.categorySlug || input.category, categories) || categories[0] || categoryCatalog[0];
   const photos = input.photos || [];
+  const statusApproved = ["onayli", "onayl"].includes(slugify(input.status));
+  const isApproved = input.verified ?? input.isVerified ?? (input.status ? statusApproved : approved);
   return {
     id: input.id || `local-${Date.now()}-${Math.random().toString(16).slice(2)}`,
     name,
@@ -684,8 +751,8 @@ function buildUserBusiness(input, ownerId, approved = false) {
     reviewCount: Number(input.reviewCount || 0),
     open: input.open ?? true,
     isOpen: input.isOpen ?? true,
-    verified: approved,
-    isVerified: approved,
+    verified: isApproved,
+    isVerified: isApproved,
     sponsored: input.packageType === "premium",
     isSponsored: input.packageType === "premium",
     featured: true,
@@ -713,7 +780,11 @@ function buildUserBusiness(input, ownerId, approved = false) {
   };
 }
 
-app.get("/api/health", (_req, res) => res.json({ ok: true, googleEnabled: Boolean(GOOGLE_KEY) }));
+app.get("/api/health", (_req, res) => res.json({
+  ok: true,
+  googleEnabled: Boolean(GOOGLE_KEY),
+  storage: hasBlobStore() ? "vercel-blob" : "local-json"
+}));
 
 app.post("/api/auth/register", async (req, res) => {
   const { role = "customer", name, email, password, businessName, phone } = req.body;
@@ -725,7 +796,7 @@ app.post("/api/auth/register", async (req, res) => {
     const user = { id: `u-${Date.now()}`, role, name, email: email.toLowerCase(), passwordHash: await bcrypt.hash(password, 10), packageType: null, createdAt: now() };
     db.users.push(user);
     if (role === "business") {
-      const business = buildUserBusiness({ businessName: businessName || name, phone, city: "Mersin" }, user.id, false);
+      const business = buildUserBusiness({ businessName: businessName || name, phone, city: "Mersin" }, user.id, false, db.categories);
       user.businessId = business.id;
       db.businesses.unshift(business);
       createNotification(db, { role: "admin", title: "Yeni isletme kaydi", text: `${business.name} kayit oldu ve onay bekliyor.`, to: "/admin" });
@@ -769,19 +840,19 @@ app.post("/api/auth/package", auth(["business"]), async (req, res) => {
 
 app.get("/api/businesses", async (req, res) => {
   const db = await seedDb();
-  const localRows = filterBusinesses(db.businesses, req.query);
+  const localRows = filterBusinesses(db.businesses, req.query, db.categories);
   if (localRows.length || !req.query.autofetch) {
     return res.json({ businesses: localRows, googleEnabled: Boolean(GOOGLE_KEY), source: "db", message: GOOGLE_KEY ? null : "GOOGLE_MAPS_API_KEY tanimli degil; canli veri cekilemedi." });
   }
   const sync = await syncOsmPlaces({ city: req.query.city || "Mersin", category: req.query.category, limit: req.query.limit || 25 });
   const freshDb = await seedDb();
-  res.json({ businesses: filterBusinesses(freshDb.businesses, req.query), provider: "osm", cacheHit: sync.cacheHit, savedCount: sync.savedCount });
+  res.json({ businesses: filterBusinesses(freshDb.businesses, req.query, freshDb.categories), provider: "osm", cacheHit: sync.cacheHit, savedCount: sync.savedCount });
 });
 
 app.post("/api/businesses", auth(["admin", "business"]), async (req, res) => {
   if (!req.body.name && !req.body.businessName) return res.status(400).json({ message: "Isletme adi gerekli" });
   const business = await withDb(async (db) => {
-    const row = buildUserBusiness(req.body, req.user.role === "business" ? req.user.id : req.body.ownerId, req.user.role === "admin");
+    const row = buildUserBusiness(req.body, req.user.role === "business" ? req.user.id : req.body.ownerId, req.user.role === "admin", db.categories);
     db.businesses.unshift(row);
     const owner = db.users.find((user) => user.id === row.ownerId);
     if (owner) owner.businessId = row.id;
@@ -810,7 +881,7 @@ app.put("/api/businesses/:id", auth(["admin", "business"]), async (req, res) => 
     const row = db.businesses.find((item) => item.id === req.params.id || item.slug === req.params.id);
     if (!row) return null;
     if (req.user.role === "business" && row.ownerId !== req.user.id) return "forbidden";
-    const category = categoryBySlugOrId(req.body.categoryId || req.body.categorySlug || req.body.category) || categoryBySlugOrId(row.categoryId) || categoryCatalog[0];
+    const category = categoryBySlugOrId(req.body.categoryId || req.body.categorySlug || req.body.category, db.categories) || categoryBySlugOrId(row.categoryId, db.categories) || db.categories[0] || categoryCatalog[0];
     Object.assign(row, req.body, {
       categoryId: category.id,
       category: category.name,
@@ -829,7 +900,7 @@ app.put("/api/businesses/:id", auth(["admin", "business"]), async (req, res) => 
 });
 
 app.delete("/api/businesses/:id", auth(["admin"]), async (req, res) => {
-  await withDb(async (db) => db.businesses = db.businesses.filter((item) => item.id !== req.params.id));
+  await withDb(async (db) => db.businesses = db.businesses.filter((item) => item.id !== req.params.id && item.slug !== req.params.id));
   res.json({ ok: true });
 });
 
@@ -860,8 +931,81 @@ app.post("/api/businesses/:id/claim", auth(["business"]), async (req, res) => {
 
 app.get("/api/categories", async (_req, res) => {
   const db = await seedDb();
-  const categories = db.categories.map((category) => ({ ...category, count: db.businesses.filter((business) => business.categoryId === category.id || business.categorySlug === category.slug).length }));
+  const categories = db.categories.map((category) => ({
+    ...category,
+    count: db.businesses.filter((business) => (
+      business.categoryId === category.id ||
+      business.categorySlug === category.slug ||
+      slugify(business.category) === slugify(category.name)
+    )).length
+  }));
   res.json({ categories });
+});
+
+app.post("/api/categories", auth(["admin"]), async (req, res) => {
+  const payload = await withDb(async (db) => {
+    const name = String(req.body.name || "").trim();
+    if (!name) return { status: 400, body: { message: "Kategori adi gerekli" } };
+    const slug = slugify(req.body.slug || name);
+    if (categoryBySlugOrId(slug, db.categories) || categoryBySlugOrId(name, db.categories)) {
+      return { status: 409, body: { message: "Bu kategori zaten var" } };
+    }
+    const category = {
+      id: slug,
+      slug,
+      name,
+      icon: req.body.icon || "📍",
+      count: 0,
+      createdAt: now(),
+      updatedAt: now()
+    };
+    db.categories.push(category);
+    createNotification(db, { role: "admin", title: "Kategori eklendi", text: `${name} kategorisi sisteme eklendi.`, to: "/admin" });
+    return { status: 201, body: { category } };
+  });
+  res.status(payload.status).json(payload.body);
+});
+
+app.put("/api/categories/:id", auth(["admin"]), async (req, res) => {
+  const payload = await withDb(async (db) => {
+    const category = categoryBySlugOrId(req.params.id, db.categories);
+    if (!category) return { status: 404, body: { message: "Kategori bulunamadi" } };
+    const nextName = String(req.body.name || category.name).trim();
+    const nextSlug = slugify(req.body.slug || category.slug || nextName);
+    const duplicate = db.categories.find((item) => item !== category && (item.id === nextSlug || item.slug === nextSlug || slugify(item.name) === slugify(nextName)));
+    if (duplicate) return { status: 409, body: { message: "Bu kategori zaten var" } };
+    const previous = { id: category.id, slug: category.slug, name: category.name };
+    Object.assign(category, {
+      id: nextSlug,
+      slug: nextSlug,
+      name: nextName,
+      icon: req.body.icon || category.icon || "📍",
+      updatedAt: now()
+    });
+    db.businesses.forEach((business) => {
+      const matchesPrevious = business.categoryId === previous.id || business.categorySlug === previous.slug || slugify(business.category) === slugify(previous.name);
+      if (matchesPrevious) {
+        business.categoryId = category.id;
+        business.categorySlug = category.slug;
+        business.category = category.name;
+        business.updatedAt = now();
+      }
+    });
+    return { status: 200, body: { category } };
+  });
+  res.status(payload.status).json(payload.body);
+});
+
+app.delete("/api/categories/:id", auth(["admin"]), async (req, res) => {
+  const payload = await withDb(async (db) => {
+    const category = categoryBySlugOrId(req.params.id, db.categories);
+    if (!category) return { status: 404, body: { message: "Kategori bulunamadi" } };
+    const used = db.businesses.some((business) => business.categoryId === category.id || business.categorySlug === category.slug || slugify(business.category) === slugify(category.name));
+    if (used) return { status: 409, body: { message: "Bu kategoriye bagli isletmeler var; veri kaybi olmamasi icin silinmedi." } };
+    db.categories = db.categories.filter((item) => item !== category);
+    return { status: 200, body: { ok: true } };
+  });
+  res.status(payload.status).json(payload.body);
 });
 
 app.get("/api/cities", async (_req, res) => {
@@ -1058,7 +1202,12 @@ app.get("/api/google/places/details/:placeId", async (req, res) => {
   res.status(response.status).json(await response.json());
 });
 
-await seedDb();
-app.listen(PORT, "127.0.0.1", () => {
-  console.log(`API ready on http://127.0.0.1:${PORT}`);
-});
+export default app;
+export { seedDb };
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  await seedDb();
+  app.listen(PORT, () => {
+    console.log(`API ready on port ${PORT}`);
+  });
+}
