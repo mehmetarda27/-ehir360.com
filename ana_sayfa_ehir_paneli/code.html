@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Şehir Paneli - Mersin'in Dijital Rehberi</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Shared Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#f8f9ff",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#0b1c30",
+                    "primary-fixed": "#dce1ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "error-container": "#ffdad6",
+                    "tertiary-container": "#5c3800",
+                    "outline-variant": "#c5c5d3",
+                    "primary": "#00236f",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-secondary-container": "#00714d",
+                    "primary-container": "#1e3a8a",
+                    "tertiary": "#3e2400",
+                    "on-tertiary-fixed": "#2a1700",
+                    "secondary-fixed": "#6ffbbe",
+                    "surface": "#f8f9ff",
+                    "surface-container-low": "#eff4ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface-container-high": "#dce9ff",
+                    "surface-dim": "#cbdbf5",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#90a8ff",
+                    "on-error-container": "#93000a",
+                    "on-surface": "#0b1c30",
+                    "secondary-container": "#6cf8bb",
+                    "surface-tint": "#4059aa",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-primary-fixed-variant": "#264191",
+                    "outline": "#757682",
+                    "surface-container": "#e5eeff",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "surface-variant": "#d3e4fe",
+                    "on-primary-fixed": "#00164e",
+                    "on-secondary": "#ffffff",
+                    "inverse-primary": "#b6c4ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-primary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-container": "#ef9900",
+                    "inverse-surface": "#213145",
+                    "on-secondary-fixed": "#002113",
+                    "on-surface-variant": "#444651",
+                    "secondary": "#006c49",
+                    "primary-fixed-dim": "#b6c4ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "base": "8px",
+                    "container-max": "1280px",
+                    "margin-desktop": "40px",
+                    "stack-md": "24px",
+                    "gutter": "24px",
+                    "stack-sm": "12px",
+                    "stack-lg": "48px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "headline-xl": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #f8f9ff; color: #0b1c30; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .hero-gradient { background: linear-gradient(135deg, #00236f 0%, #1e3a8a 100%); }
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        @media (max-width: 768px) { .bento-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface shadow-sm sticky top-0 z-50 h-20 flex items-center">
+<nav class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto">
+<div class="flex items-center gap-10">
+<a class="font-headline-md text-headline-md font-bold text-primary" href="#">Şehir Paneli</a>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-primary border-b-2 border-primary pb-1 font-label-md text-label-md" href="#">Ana Sayfa</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Kategoriler</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Kampanyalar</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Etkinlikler</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Mersin Rehberi</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-4 mr-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">location_on</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">notifications</button>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity active:scale-95">Giriş Yap</button>
+</div>
+</nav>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="hero-gradient relative min-h-[500px] flex items-center text-white py-stack-lg overflow-hidden">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+</div>
+<div class="px-margin-desktop max-w-container-max mx-auto w-full relative z-10">
+<div class="max-w-3xl">
+<h1 class="font-headline-xl text-headline-xl mb-6">Mersin'in Kalbinde <br/>Ne Aramıştınız?</h1>
+<p class="font-body-lg text-body-lg mb-10 opacity-90">Şehrin en güvenilir rehberi ile restoranlardan sağlığa, etkinliklerden kampanyalara her şey tek bir panelde.</p>
+<div class="bg-white p-2 rounded-xl shadow-xl flex flex-col md:flex-row gap-2">
+<div class="flex-1 flex items-center px-4 border-b md:border-b-0 md:border-r border-outline-variant">
+<span class="material-symbols-outlined text-primary mr-3">search</span>
+<input class="w-full border-none focus:ring-0 text-on-surface py-3 font-body-md" placeholder="İşletme, kategori veya hizmet arayın..." type="text"/>
+</div>
+<div class="w-full md:w-48 flex items-center px-4">
+<span class="material-symbols-outlined text-primary mr-3">location_on</span>
+<select class="w-full border-none focus:ring-0 text-on-surface font-label-md bg-transparent">
+<option>Mersin</option>
+<option>Mezitli</option>
+<option>Yenişehir</option>
+<option>Tarsus</option>
+</select>
+</div>
+<button class="bg-primary text-on-primary px-10 py-3 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors">Ara</button>
+</div>
+<div class="mt-8 flex flex-wrap gap-3">
+<span class="text-label-sm font-label-sm opacity-80 self-center mr-2">Popüler:</span>
+<a class="bg-white/10 hover:bg-white/20 px-4 py-1.5 rounded-full text-label-sm transition-colors backdrop-blur-md" href="#">Restoranlar</a>
+<a class="bg-white/10 hover:bg-white/20 px-4 py-1.5 rounded-full text-label-sm transition-colors backdrop-blur-md" href="#">Sağlık</a>
+<a class="bg-white/10 hover:bg-white/20 px-4 py-1.5 rounded-full text-label-sm transition-colors backdrop-blur-md" href="#">Eczaneler</a>
+<a class="bg-white/10 hover:bg-white/20 px-4 py-1.5 rounded-full text-label-sm transition-colors backdrop-blur-md" href="#">Otomobil</a>
+</div>
+</div>
+</div>
+<!-- Decorative image element -->
+<div class="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-1/3 h-4/5 rounded-l-3xl overflow-hidden shadow-2xl border-4 border-white/20">
+<img class="w-full h-full object-cover" data-alt="A panoramic high-angle view of the Mersin city skyline at sunset, featuring the Mediterranean coastline with modern buildings and palm-lined avenues. The lighting is warm and cinematic, with a soft orange and blue color palette. Professional travel photography style, high resolution, clean and sharp." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQTg5ZFIjCXl4mXObp5lYJ5n4NV9BO3QlmW_wYLYzXk3ye6zr5zakn_UrtPylIRvWcN3xDDHAXeVtkni8PoDRuuChMg3ObqFntSsr9y-IrIv5dE8NFDtrfDLDULnYpPzw11xOUgoJ2X3r_Q224fv3uhSXUzxRjRVSYrE-JCnlGXZHUQVGcGYsKzTb_2zPY-flwjjRf7EjwPRNdyxzeyzO43UU-exYVnphlMbP5mTkueaV3WHO6rfBq"/>
+</div>
+</section>
+<!-- Quick Links (Bento Style) -->
+<section class="py-stack-lg px-margin-desktop max-w-container-max mx-auto -mt-16 relative z-20">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+<a class="bg-white p-6 rounded-xl shadow-sm border border-outline-variant hover:shadow-lg transition-all group flex flex-col items-start gap-4" href="#">
+<div class="w-12 h-12 rounded-lg bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface group-hover:text-primary">Nöbetçi Eczaneler</h3>
+<p class="text-label-sm text-on-surface-variant">Size en yakın 4 açık eczane</p>
+</div>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-sm border border-outline-variant hover:shadow-lg transition-all group flex flex-col items-start gap-4" href="#">
+<div class="w-12 h-12 rounded-lg bg-secondary-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">work</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface group-hover:text-primary">İş İlanları</h3>
+<p class="text-label-sm text-on-surface-variant">Mersin geneli 156 yeni ilan</p>
+</div>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-sm border border-outline-variant hover:shadow-lg transition-all group flex flex-col items-start gap-4" href="#">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface group-hover:text-primary">Etkinlikler</h3>
+<p class="text-label-sm text-on-surface-variant">Konser, sergi ve festivaller</p>
+</div>
+</a>
+<a class="bg-white p-6 rounded-xl shadow-sm border border-outline-variant hover:shadow-lg transition-all group flex flex-col items-start gap-4" href="#">
+<div class="w-12 h-12 rounded-lg bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">campaign</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface group-hover:text-primary">Kampanyalar</h3>
+<p class="text-label-sm text-on-surface-variant">Yerel işletmelere özel indirimler</p>
+</div>
+</a>
+</div>
+</section>
+<!-- Featured Businesses -->
+<section class="py-stack-lg bg-background">
+<div class="px-margin-desktop max-w-container-max mx-auto">
+<div class="flex justify-between items-end mb-stack-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Öne Çıkan İşletmeler</h2>
+<p class="text-on-surface-variant max-w-xl">Mersin'in en sevilen ve doğrulanmış yerel işletmelerine göz atın.</p>
+</div>
+<a class="text-primary font-label-md hover:underline flex items-center" href="#">Hepsini Gör <span class="material-symbols-outlined ml-1">arrow_forward</span></a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Business Card 1 -->
+<div class="bg-white rounded-xl overflow-hidden shadow-sm border border-outline-variant hover:shadow-md transition-shadow group">
+<div class="relative h-56">
+<img class="w-full h-full object-cover" data-alt="Interior of a luxury gourmet restaurant in Mersin with modern decoration, warm ambient lighting, elegant table settings, and large windows overlooking the city. Professional architectural photography style, clean composition, sophisticated atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwI0bRRVb7tnCOEuvVTV1ShdBoz49xubciCvxqqbtmtqLMtet_dPyZog_6aXhyKh-gbof8qduDgR0gT3MwasYzYQOv8Rx8M0W7E9WmcB4lgkNRg6RNQ8lcytlHVJp7Z3klmLvTE0-Jky0WtluZiluI0ymgwgoQFvzYiU5-pkyXHIP5gQZLICd_24auJ1PmrWHoLFQHmHI9MAfhvvmThLyGnx1EHkPQSdVuGf1YgvxU9hQhOvScoau3"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span> Doğrulanmış
+                            </div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Gaziantep Mutfağı - Pozcu</h3>
+<div class="flex items-center text-tertiary">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold ml-1">4.9</span>
+</div>
+</div>
+<p class="text-on-surface-variant text-sm mb-4 flex items-center">
+<span class="material-symbols-outlined text-sm mr-1">restaurant</span> Kebap &amp; Lahmacun • Yenişehir
+                            </p>
+<div class="flex justify-between items-center pt-4 border-t border-outline-variant">
+<span class="text-label-sm text-on-surface-variant">240 yorum</span>
+<button class="text-primary font-bold text-label-md">İncele</button>
+</div>
+</div>
+</div>
+<!-- Business Card 2 -->
+<div class="bg-white rounded-xl overflow-hidden shadow-sm border border-outline-variant hover:shadow-md transition-shadow group">
+<div class="relative h-56">
+<img class="w-full h-full object-cover" data-alt="A trendy waterfront cafe at Mersin Marina, featuring minimalist outdoor furniture, vibrant plants, and a stunning view of yachts and the blue sea. The atmosphere is bright, breezy, and coastal. High-end lifestyle photography, light and airy aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGA-oWPg4Ns3tTSV2lZLrtDRteXW6LBlxVG3TXcy87zRCrl0ZXvT4dQFcWUH7ubGoHc8vXGyzsJOB4jx_1Smve5u94RYs0NYmHgPErRMoFJoHcPPDEZxHJeYjkq_AJxG8hNPeWJch07RIca7FgrH5ik32a3voQkggw83HcRToctVXF0T23oIvxajAI_vaDxSUwISCFi8DGB_ifLJy7XgzCaK4TfFywClp9Vle2m4z4bTz4mm9v1SmO"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span> Doğrulanmış
+                            </div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Mersin Marina Cafe</h3>
+<div class="flex items-center text-tertiary">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold ml-1">4.7</span>
+</div>
+</div>
+<p class="text-on-surface-variant text-sm mb-4 flex items-center">
+<span class="material-symbols-outlined text-sm mr-1">coffee</span> Cafe &amp; Tatlı • Marina
+                            </p>
+<div class="flex justify-between items-center pt-4 border-t border-outline-variant">
+<span class="text-label-sm text-on-surface-variant">1.2k yorum</span>
+<button class="text-primary font-bold text-label-md">İncele</button>
+</div>
+</div>
+</div>
+<!-- Business Card 3 -->
+<div class="bg-white rounded-xl overflow-hidden shadow-sm border border-outline-variant hover:shadow-md transition-shadow group">
+<div class="relative h-56">
+<img class="w-full h-full object-cover" data-alt="A modern wellness and spa center in Mersin with serene blue lighting, minimalist zen decor, and a luxury swimming pool. Professional interior photography, calming and tranquil mood, deep focus, premium feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9Q8E1NxcT_h8GP3oAbZhMesy5_JWuxR4Fqk2iy4Hg_3GssJ5j0eqmbXwa4SeG521IDBNXp_8zLmDpi0UyS9ahhADRAeISMBGW7MNQPE2TUoJ4Bpj-ZmQefkw30jwkLdBlN12PSdO1ku4Us7LNKiFszY8L1paM0k-kuedAR3vttKA_41PXkGq387JIM3uXZZoMCdH3SbcDDamksr2HaSWoO11rG6ypQqFDKztNem7EGQh1FTxCZm9Q"/>
+<div class="absolute top-4 left-4 bg-tertiary-fixed text-tertiary-container text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">stars</span> Sponsorlu
+                            </div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Aura Wellness Spa</h3>
+<div class="flex items-center text-tertiary">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold ml-1">4.5</span>
+</div>
+</div>
+<p class="text-on-surface-variant text-sm mb-4 flex items-center">
+<span class="material-symbols-outlined text-sm mr-1">spa</span> Sağlık &amp; Güzellik • Mezitli
+                            </p>
+<div class="flex justify-between items-center pt-4 border-t border-outline-variant">
+<span class="text-label-sm text-on-surface-variant">88 yorum</span>
+<button class="text-primary font-bold text-label-md">İncele</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Categories Grid -->
+<section class="py-stack-lg bg-surface-container-lowest">
+<div class="px-margin-desktop max-w-container-max mx-auto text-center">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-12">Sektöre Göre Keşfedin</h2>
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
+<a class="flex flex-col items-center gap-4 p-6 hover:bg-surface-container-low rounded-2xl transition-all border border-transparent hover:border-outline-variant group" href="#">
+<div class="w-16 h-16 rounded-full bg-surface flex items-center justify-center text-primary shadow-sm group-hover:shadow-md">
+<span class="material-symbols-outlined text-3xl">restaurant</span>
+</div>
+<span class="font-label-md text-label-md">Yeme &amp; İçme</span>
+</a>
+<a class="flex flex-col items-center gap-4 p-6 hover:bg-surface-container-low rounded-2xl transition-all border border-transparent hover:border-outline-variant group" href="#">
+<div class="w-16 h-16 rounded-full bg-surface flex items-center justify-center text-primary shadow-sm group-hover:shadow-md">
+<span class="material-symbols-outlined text-3xl">local_hospital</span>
+</div>
+<span class="font-label-md text-label-md">Sağlık</span>
+</a>
+<a class="flex flex-col items-center gap-4 p-6 hover:bg-surface-container-low rounded-2xl transition-all border border-transparent hover:border-outline-variant group" href="#">
+<div class="w-16 h-16 rounded-full bg-surface flex items-center justify-center text-primary shadow-sm group-hover:shadow-md">
+<span class="material-symbols-outlined text-3xl">shopping_bag</span>
+</div>
+<span class="font-label-md text-label-md">Alışveriş</span>
+</a>
+<a class="flex flex-col items-center gap-4 p-6 hover:bg-surface-container-low rounded-2xl transition-all border border-transparent hover:border-outline-variant group" href="#">
+<div class="w-16 h-16 rounded-full bg-surface flex items-center justify-center text-primary shadow-sm group-hover:shadow-md">
+<span class="material-symbols-outlined text-3xl">directions_car</span>
+</div>
+<span class="font-label-md text-label-md">Otomobil</span>
+</a>
+<a class="flex flex-col items-center gap-4 p-6 hover:bg-surface-container-low rounded-2xl transition-all border border-transparent hover:border-outline-variant group" href="#">
+<div class="w-16 h-16 rounded-full bg-surface flex items-center justify-center text-primary shadow-sm group-hover:shadow-md">
+<span class="material-symbols-outlined text-3xl">hotel</span>
+</div>
+<span class="font-label-md text-label-md">Konaklama</span>
+</a>
+<a class="flex flex-col items-center gap-4 p-6 hover:bg-surface-container-low rounded-2xl transition-all border border-transparent hover:border-outline-variant group" href="#">
+<div class="w-16 h-16 rounded-full bg-surface flex items-center justify-center text-primary shadow-sm group-hover:shadow-md">
+<span class="material-symbols-outlined text-3xl">construction</span>
+</div>
+<span class="font-label-md text-label-md">Hizmet</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Recent Activity -->
+<section class="py-stack-lg bg-background">
+<div class="px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<div class="lg:col-span-2">
+<h2 class="font-headline-md text-headline-md text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">forum</span> Son Yorumlar
+                    </h2>
+<div class="space-y-4">
+<div class="bg-white p-6 rounded-xl border border-outline-variant shadow-sm flex gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Portrait of a smiling woman in her 30s with a natural look, soft lighting, minimalist background. Professional lifestyle portrait style, high quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrFRPTRDh23CUSKyG4BWpwXHMq8KpD15myzpCunw6X9X8RYfTZ0q64ms4fV8F5gcOBrqRY_c8tFoWXzHxKRA__jTU58J0MoS_-I8yBfCLlk7q4EXN7XsHoYQK56cpg2Q1C8NgQioTI0YTENFEvIU_Dhmj9qIPM5o5WMlbLzzuD_D6Es462WgnnVeQjM45Nu1syareP61iZ8dtA7910WoXCc4Fp1aFj8iYA8RqsoAn7DauThuxqfmGO"/>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<h4 class="font-label-md text-label-md">Ayşe Yılmaz</h4>
+<span class="text-label-sm text-on-surface-variant">2 saat önce</span>
+</div>
+<div class="flex text-tertiary mb-2">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-on-surface-variant italic">"Gaziantep Mutfağı'nda lahmacunlar efsaneydi. Hizmet kalitesi çok yüksek, Pozcu'da gidilebilecek en iyi mekanlardan biri."</p>
+<a class="text-primary text-sm mt-2 inline-block font-bold" href="#">@ Gaziantep Mutfağı - Pozcu</a>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-outline-variant shadow-sm flex gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Portrait of a young professional man with glasses, looking friendly and confident. Clean business casual style, soft studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDne9j1vWmQEM7mYtFfGtYUvWAcSs8ZnIdVCeutfI9IxxkOtuwwzbpjpSbpB7G5BXusz_XkRDYQVPikGrY8xdXESznsVgv2ks0-kK9bXGpXF_B7KleeYJfrsQfAblGFct_QpQC646CudjktLLNRMRm6NU9rVkVV5EeIRTUl42FQPoO5rHSRTD85fsz1mXZeoLk0dEdzC9tnWPkh0vpg0JnfRF-PnS30vn19Y0CnRiQ04JMaX5BdCZdP"/>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<h4 class="font-label-md text-label-md">Murat Kaya</h4>
+<span class="text-label-sm text-on-surface-variant">5 saat önce</span>
+</div>
+<div class="flex text-tertiary mb-2">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm">star</span>
+</div>
+<p class="text-on-surface-variant italic">"Marina Cafe'de gün batımı izlemek harika. Kahveleri de oldukça başarılı. Fiyatlar bir tık yüksek ama manzaraya değer."</p>
+<a class="text-primary text-sm mt-2 inline-block font-bold" href="#">@ Mersin Marina Cafe</a>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">fiber_new</span> Yeni Eklenenler
+                    </h2>
+<div class="bg-white border border-outline-variant rounded-xl divide-y divide-outline-variant shadow-sm overflow-hidden">
+<div class="p-4 flex gap-4 hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Modern storefront of a new boutique bakery in Mersin, with minimalist signage and large glass windows showcasing fresh pastries. Contemporary retail architecture, warm interior lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp2UULsDx1qK72hraY-FDBLR29Bg7V8GIZptA0yamNSH9ix8ZYsV2_vxEyZvkLhw3c82tViDwJkEbJh91beRDJ8-_z6jV8GNIkK24in0rYr-IrY5yvgSjnhULbpUjZLuIZ1wyvSMarI8xnzo2mSxaqhtUf62ZfSV_n15N-ZciZ92SCCQs9KMY_5H6bk_9NAXBOgEeVZuQ5dudolLEE_calkD5003sN4VuMENhO8eCSnSaMa95vgJGj"/>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface group-hover:text-primary">Ekmek Atölyesi</h4>
+<p class="text-label-sm text-on-surface-variant">Fırın &amp; Pastane • Mezitli</p>
+<span class="text-[10px] bg-secondary-container text-secondary font-bold px-2 py-0.5 rounded-full mt-2 inline-block">Yeni</span>
+</div>
+</div>
+<div class="p-4 flex gap-4 hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Modern fitness studio interior with high-tech gym equipment, clean wooden floors, and bright natural lighting from floor-to-ceiling windows. Professional sports photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9iSg7DmS44qa1sES7wwZ_Uo1YtiamAWE5cNZartjEZjEwrIcJK7_-4RmYJRNGrDS4NoTSjLBVFn09lld5RQY19cIvZAH2hl7GfOSX7yplmPzEXBn2bbAGks-B4RZAYfzHEZeHPnAEa8_I6etB6Ib1ZEqCXm6zHH9VnyVNEnI7fXHeF5xIyNkjnVfcTztoS0X_jG7qt5OJvW0CD7GG3Unn0QgLwE5Amn7dCNy7l45ujCN_4tbIldw6"/>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface group-hover:text-primary">Flex Fit Studio</h4>
+<p class="text-label-sm text-on-surface-variant">Spor &amp; Fitness • Yenişehir</p>
+<span class="text-[10px] bg-secondary-container text-secondary font-bold px-2 py-0.5 rounded-full mt-2 inline-block">Yeni</span>
+</div>
+</div>
+<div class="p-4 flex gap-4 hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Interior of a modern pediatric clinic, colorful yet professional, with child-friendly decoration and clean medical equipment. Bright and welcoming medical environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWvugZIzHGjFXawJHcVJQge0CrYOOl1fEhkXkG2pAYUX8W_MoP9P0oZj4U4A5cXkUfIZMyPBLtCFdNMI7cnflwZjRHkq-dr9ht4N4vnB2kpoeHmDB_6SP3O9fWyQ1_7spbyXI3S8aPsCjuUp8bcUCmuFNWC-uzWoXs0IDrDOI5iTSSWrRP3_Eo0A99STZnRd_YKt5SaQegQlPHFXjlVsC_y1XGJNUXghl2iJrAzeooW3WXdu98wnw3"/>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface group-hover:text-primary">Çocuk Sağlığı Merkezi</h4>
+<p class="text-label-sm text-on-surface-variant">Sağlık • Toroslar</p>
+<span class="text-[10px] bg-secondary-container text-secondary font-bold px-2 py-0.5 rounded-full mt-2 inline-block">Yeni</span>
+</div>
+</div>
+<div class="p-4">
+<button class="w-full text-center text-primary font-bold text-label-md py-2">Tüm Yenileri Gör</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-stack-lg">
+<div class="px-margin-desktop max-w-container-max mx-auto">
+<div class="bg-primary rounded-[2rem] p-stack-lg text-white flex flex-col md:flex-row items-center gap-stack-lg relative overflow-hidden">
+<div class="absolute -right-20 -top-20 w-80 h-80 bg-primary-container rounded-full opacity-20 blur-3xl"></div>
+<div class="absolute -left-20 -bottom-20 w-80 h-80 bg-secondary-container rounded-full opacity-10 blur-3xl"></div>
+<div class="md:w-1/2 relative z-10">
+<h2 class="font-headline-xl text-headline-xl mb-6">İşletmenizi Şehir Paneli'ne Ekleyin</h2>
+<p class="font-body-lg text-body-lg mb-8 opacity-90">Mersin'in en büyük dijital rehberinde yerinizi alın, binlerce müşteriye anında ulaşın. Görünürlüğünüzü profesyonel çözümlerle artırın.</p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-secondary text-on-secondary px-8 py-4 rounded-xl font-headline-md text-headline-md hover:scale-105 transition-transform">Hemen Kayıt Ol</button>
+<button class="bg-white/10 border border-white/20 px-8 py-4 rounded-xl font-headline-md text-headline-md backdrop-blur-md hover:bg-white/20 transition-colors">Paketleri İncele</button>
+</div>
+</div>
+<div class="md:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10">
+<div class="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm">
+<div class="text-secondary mb-4"><span class="material-symbols-outlined text-4xl">trending_up</span></div>
+<h4 class="font-label-md text-label-md mb-2">Daha Fazla Görünürlük</h4>
+<p class="text-sm opacity-80">Arama sonuçlarında ve kategorilerde en üstte yer alın.</p>
+</div>
+<div class="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm">
+<div class="text-tertiary-fixed-dim mb-4"><span class="material-symbols-outlined text-4xl">reviews</span></div>
+<h4 class="font-label-md text-label-md mb-2">İtibar Yönetimi</h4>
+<p class="text-sm opacity-80">Müşteri yorumlarını profesyonelce yanıtlayın.</p>
+</div>
+<div class="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm">
+<div class="text-secondary-fixed mb-4"><span class="material-symbols-outlined text-4xl">analytics</span></div>
+<h4 class="font-label-md text-label-md mb-2">Detaylı İstatistikler</h4>
+<p class="text-sm opacity-80">Tıklama, arama ve etkileşim verilerinizi takip edin.</p>
+</div>
+<div class="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm">
+<div class="text-primary-fixed-dim mb-4"><span class="material-symbols-outlined text-4xl">verified</span></div>
+<h4 class="font-label-md text-label-md mb-2">Güven Rozeti</h4>
+<p class="text-sm opacity-80">Doğrulanmış işletme statüsü ile güven kazanın.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-on-background text-white mt-stack-lg border-t border-outline-variant">
+<div class="w-full py-stack-lg px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="md:col-span-1">
+<h2 class="font-headline-lg text-headline-lg font-black text-primary-fixed mb-4">Şehir Paneli</h2>
+<p class="font-body-md text-body-md opacity-70 mb-6 italic">Mersin'in dijital rehberi. Şehri keşfetmek, işinizi büyütmek ve yerel hayatı kolaylaştırmak için buradayız.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors" href="#">
+<img class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDQSfMuYVa2xAsfj3akyShnK-XOvLuwx0lkZ4u8OT-f-qZJXNrNhYis1yqgPbLrtUT5SktUveqLlooMimL3ZwobLKeKvT1UJPp4x0xNp4aOnkXGP6qtij8qYgDXmeSAgiZeVYlmtuKXpfsoAkGzd7bZCPAGgcAkuxfSxg9L8wE1-1bR7mT_2_7-XYJ-kgTzJhKOA6cbhVHwuOGgKH38FXNEamR_Vs4fldrUrkdys9EVLzu7_cDZ_ZK"/>
+</a>
+<a class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors" href="#">
+<img class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUahdffviXTxJXUx0TSUR_HxNh6romdHSZ5hD_wrJGd1_fYV5uKWNWgneRfP4OPAt7zl_qf4W9EU5o9MP0TWpGiW4qktMF2PvKT4Q-opSZmdvWzRvWkSkLkO_OTcSc4IhG6ZFyX1qsx-Q_wzO7SAEWk0OFEg4zX8NlJ9b4Y27xUilo00KqHzrsITvuAPqXhX1zymt0S2aKijpNj03CwPE9_U-ckzIR8SUhFAq_vCy9aunLdiNr8fvP"/>
+</a>
+<a class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors" href="#">
+<img class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVcUoEX2mZ_ngDoZlJ1HrJE21usOEv6Fg9XwimrO_8nppHq7ohlmOQnaueDj7FTiqol74FWXA9H4j-gyXn8daB8t8a0Kw-zmFXp9bgPOYCQRWROMY1zCx5ejfkaVZV3jfW8w8KVdYJkAuTXnf4Ylryke9VtV1wTE9TKfWhoz261vHZ2wbBrZjXefclSO_2dGy5y4ieNfHTTP3_Hsw_bVvmHVJL88OtX1D9-wspQ8zo4BuXQatSgTD9"/>
+</a>
+</div>
+</div>
+<div>
+<h4 class="font-label-md text-label-md mb-6 uppercase tracking-wider text-primary-fixed">Kurumsal</h4>
+<ul class="space-y-4 font-body-md text-body-md opacity-80">
+<li><a class="hover:text-primary-fixed transition-colors" href="#">Hakkımızda</a></li>
+<li><a class="hover:text-primary-fixed transition-colors" href="#">İletişim</a></li>
+<li><a class="hover:text-primary-fixed transition-colors" href="#">Sıkça Sorulan Sorular</a></li>
+<li><a class="hover:text-primary-fixed transition-colors" href="#">KVKK Aydınlatma Metni</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md mb-6 uppercase tracking-wider text-primary-fixed">İşletmeler</h4>
+<ul class="space-y-4 font-body-md text-body-md opacity-80">
+<li><a class="hover:text-primary-fixed transition-colors font-bold" href="#">İşletme Kaydı Oluştur</a></li>
+<li><a class="hover:text-primary-fixed transition-colors" href="#">Reklam Seçenekleri</a></li>
+<li><a class="hover:text-primary-fixed transition-colors" href="#">Paketler ve Ücretlendirme</a></li>
+<li><a class="hover:text-primary-fixed transition-colors" href="#">İşletme Destek Merkezi</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md mb-6 uppercase tracking-wider text-primary-fixed">Hizmetler</h4>
+<ul class="space-y-4 font-body-md text-body-md opacity-80">
+<li><a class="hover:text-primary-fixed transition-colors" href="#">Nöbetçi Eczaneler</a></li>
+<li><a class="hover:text-primary-fixed transition-colors" href="#">İş İlanları</a></li>
+<li><a class="hover:text-primary-fixed transition-colors" href="#">Vefat İlanları</a></li>
+<li><a class="hover:text-primary-fixed transition-colors" href="#">Şehir Portalı</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-white/10 py-6 px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center text-label-sm font-label-sm opacity-60">
+<p>© 2024 Şehir Paneli. Tüm hakları saklıdır. Mersin'in dijital rehberi.</p>
+<div class="flex gap-6 mt-4 md:mt-0">
+<a class="hover:underline" href="#">Gizlilik Politikası</a>
+<a class="hover:underline" href="#">Kullanım Koşulları</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions and effects
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.bg-white.rounded-xl');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '20px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                        entry.target.classList.remove('opacity-0', 'translate-y-4');
+                    }
+                });
+            }, observerOptions);
+
+            cards.forEach(card => {
+                card.classList.add('transition-all', 'duration-500', 'opacity-0', 'translate-y-4');
+                observer.observe(card);
+            });
+        });
+    </script>
+</body></html>

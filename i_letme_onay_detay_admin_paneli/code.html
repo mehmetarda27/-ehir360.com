@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>İşletme Onay Detayı - Şehir Paneli</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#3e2400",
+                    "on-background": "#0b1c30",
+                    "on-secondary-container": "#00714d",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#eff4ff",
+                    "secondary-fixed": "#6ffbbe",
+                    "secondary": "#006c49",
+                    "surface-tint": "#4059aa",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-container": "#ef9900",
+                    "on-surface": "#0b1c30",
+                    "outline": "#757682",
+                    "secondary-fixed-dim": "#4edea3",
+                    "tertiary-container": "#5c3800",
+                    "on-secondary-fixed": "#002113",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "primary-container": "#1e3a8a",
+                    "inverse-on-surface": "#eaf1ff",
+                    "inverse-surface": "#213145",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#444651",
+                    "background": "#f8f9ff",
+                    "inverse-primary": "#b6c4ff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container": "#e5eeff",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-error-container": "#93000a",
+                    "surface-bright": "#f8f9ff",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#00236f",
+                    "on-primary-fixed-variant": "#264191",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#005236",
+                    "surface": "#f8f9ff",
+                    "primary-fixed": "#dce1ff",
+                    "secondary-container": "#6cf8bb",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "surface-container-highest": "#d3e4fe",
+                    "outline-variant": "#c5c5d3",
+                    "surface-variant": "#d3e4fe",
+                    "on-primary-fixed": "#00164e",
+                    "on-primary-container": "#90a8ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "12px",
+                    "margin-desktop": "40px",
+                    "stack-md": "24px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "base": "8px",
+                    "stack-lg": "48px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "headline-xl": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .card-ambient {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(30, 58, 138, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-ambient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(30, 58, 138, 0.08);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="bg-surface sticky top-0 z-50 border-b border-outline-variant flex justify-between items-center w-full px-margin-desktop h-16">
+<div class="flex items-center gap-base">
+<span class="font-headline-md text-headline-md font-bold text-primary">Şehir Paneli</span>
+<div class="h-6 w-px bg-outline-variant mx-4"></div>
+<span class="font-label-md text-label-md text-on-surface-variant">Yönetim Merkezi</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-high transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-high transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface">Yönetici</p>
+<p class="text-[11px] text-on-surface-variant leading-none">Super Admin</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-primary-container object-cover" data-alt="A professional headshot of a corporate administrator, middle-aged male with a friendly expression, wearing a navy blue suit and white shirt, set against a blurred modern office background with soft lighting, reflecting authority and approachability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCb54mi6qIoj8R6z62n08XwuqogXtaJ7ddlzLm5o5G04Tp8hyQ7UgF72D5R81gS4YghWf-iGLnx7DWf8_hoyOWl-L5q2ExpOoDjqrFMLzX3FG_rlqYF7EshIUCUangLQ3nm5dtUFnDGAQ5-jgfdz9wVSvb5-iASOB-l_1Fp7fHbV5rNGY0E92C3ibg5ZCUju-VxcRHHhgWiY_EcM96ggDvbfN1hWHQGOzrw1pyGlsW7PKulyXMMYI3q"/>
+</div>
+</div>
+</header>
+<div class="flex min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="w-64 bg-on-background fixed left-0 top-16 h-[calc(100vh-64px)] flex flex-col py-stack-md z-40">
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-base text-surface-variant hover:text-on-tertiary px-4 py-3 mx-2 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-base bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 mx-2 transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">storefront</span>
+<span class="font-label-md text-label-md">İşletmeler</span>
+</a>
+<a class="flex items-center gap-base text-surface-variant hover:text-on-tertiary px-4 py-3 mx-2 transition-colors" href="#">
+<span class="material-symbols-outlined">category</span>
+<span class="font-label-md text-label-md">Kategoriler</span>
+</a>
+<a class="flex items-center gap-base text-surface-variant hover:text-on-tertiary px-4 py-3 mx-2 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Kullanıcılar</span>
+</a>
+<a class="flex items-center gap-base text-surface-variant hover:text-on-tertiary px-4 py-3 mx-2 transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Raporlar</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-white/10 pt-4">
+<a class="flex items-center gap-base text-surface-variant hover:text-on-tertiary px-4 py-3 mx-2 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Ayarlar</span>
+</a>
+<a class="flex items-center gap-base text-error px-4 py-3 mx-2 hover:bg-error/10 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Çıkış Yap</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 p-margin-desktop bg-background">
+<!-- Page Header Actions -->
+<div class="flex justify-between items-center mb-stack-lg">
+<div>
+<nav class="flex items-center gap-2 text-on-surface-variant text-label-sm mb-2">
+<a class="hover:text-primary" href="#">İşletme Yönetimi</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Başvuru Detayı</span>
+</nav>
+<h1 class="font-headline-lg text-headline-lg text-primary">İşletme Başvurusu: Marina Cafe &amp; Bistro</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-6 py-2.5 border border-error text-error font-label-md text-label-md rounded-lg hover:bg-error/5 transition-all active:scale-95">
+                        Reddet
+                    </button>
+<button class="px-8 py-2.5 bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-md hover:opacity-90 transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+                        Onayla
+                    </button>
+</div>
+</div>
+<!-- Content Grid -->
+<div class="bento-grid">
+<!-- Left Column (Wide) -->
+<div class="col-span-8 space-y-stack-md">
+<!-- Basic Information Card -->
+<section class="card-ambient rounded-xl p-6">
+<div class="flex items-start gap-6">
+<div class="w-32 h-32 rounded-xl overflow-hidden border border-outline-variant bg-surface shrink-0">
+<img class="w-full h-full object-cover" data-alt="A premium minimalist logo for Marina Cafe &amp; Bistro, featuring an elegant stylized anchor and waves icon in deep navy blue and gold. The background is a clean white, and the typography is sophisticated and modern, reflecting a high-end dining establishment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFG9m95scxLfsdiBtIV2GbAmxVZeQKcTGA6cH4HVS0U5WU0hmHYquUX04_BauxZDprNaTdxyhwrO01aeOO-AKbhvV7PgPRrqAuv5fLq2KISIycBmqwKTxjAShAGh291dTQOHYnwK8LPVKiPeGn0FPYB9Gd0erFOgXiJXWr8UEC8dBP1uqHio96oCcGCYNjURheQdkDfR0yTpWbGyx-uMXQU8CXlwMJkYP04Cyelk2ghZCifXWoxKvd"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h2 class="font-headline-md text-headline-md text-on-surface">Marina Cafe &amp; Bistro</h2>
+<span class="px-3 py-1 bg-secondary-container/20 text-secondary text-label-sm rounded-full border border-secondary/20">Restoran</span>
+</div>
+<p class="text-on-surface-variant font-body-md mb-4 leading-relaxed">Şehrin kalbinde, deniz manzarası eşliğinde modern Akdeniz mutfağı ve butik kahve deneyimi sunan premium bistro.</p>
+</div>
+<span class="px-3 py-1 bg-tertiary-fixed/30 text-on-tertiary-fixed-variant text-label-sm rounded-lg font-bold">PREMIUM</span>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant">
+<div>
+<p class="text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider">Vergi Numarası</p>
+<p class="font-label-md text-on-surface">TR 48100523610</p>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider">İşletme Türü</p>
+<p class="font-label-md text-on-surface">Limited Şirket</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact Details Card -->
+<section class="card-ambient rounded-xl p-6">
+<h3 class="font-label-md text-on-surface uppercase tracking-widest border-b border-outline-variant pb-4 mb-4">İletişim Bilgileri</h3>
+<div class="grid grid-cols-2 gap-y-6 gap-x-8">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">call</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Telefon</p>
+<p class="font-label-md text-on-surface">+90 (252) 316 44 22</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">E-posta</p>
+<p class="font-label-md text-on-surface">hello@marinacafebistro.com</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">language</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Web Sitesi</p>
+<p class="font-label-md text-on-surface">www.marinacafebistro.com</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">public</span>
+</div>
+<div class="flex gap-3">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">alternate_email</span></a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">movie</span></a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">chat</span></a>
+</div>
+</div>
+</div>
+</section>
+<!-- Gallery section -->
+<section class="card-ambient rounded-xl p-6">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-label-md text-on-surface uppercase tracking-widest">Mekan Fotoğrafları</h3>
+<span class="text-label-sm text-on-surface-variant">5 Fotoğraf Yüklendi</span>
+</div>
+<div class="grid grid-cols-4 gap-3">
+<div class="col-span-2 row-span-2 rounded-lg overflow-hidden h-64 group cursor-pointer relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A wide angle, cinematic shot of the main dining area of Marina Cafe &amp; Bistro. The interior features floor-to-ceiling windows with a view of a tranquil Mediterranean marina at dusk. Warm amber lighting, high-quality wooden furniture, and minimalist decor create a sophisticated yet cozy atmosphere. The color palette is rich with navy blues, cream, and wood tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcNj2myCK7c9aqDGLIjT6bKUAOlyT4j-v3TCHh71YBWJbDCSJSlvGd_92Qjlhyp4ceixzbnk1e6bvO8AbDhdoP0TAoEJnBNGRaTIht5rk69i56zpSIgxt2hlsdl6pY9b-1PrRaKwZP6EdXaDrDpUlaV5wtySd-ZVqLC4WF9f1rIwRyWDuE4ZXuOo6VGFYUxg7HCvTSP1oT7C6ZqNr1MjjLDfcRguAndn9hR9kKy37xB2HacvjfpTCm"/>
+<div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="rounded-lg overflow-hidden h-[124px] group cursor-pointer relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close-up of a beautifully plated Mediterranean seafood dish on a white ceramic plate. The food is vibrant and fresh, garnished with green herbs and lemon zest. The background is slightly blurred, showing the elegant textured tablecloth of the bistro. High-end food photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCFFkRJ68w13Jgop_xkyoOwleDR7NB68BvsLMW4DOr583rendBixQ8miPWeY7v5kPSUTmlpVjc02L1k9P1NezN5Yv7xYI6Guk2Z2xeT95doHv7lQcWgr7ucBVzT3Jsk3_OJ3_0N_bZ7O-dNVBvA0ia_YoHWqmDOwDa9t5yIVQZ6f6DYCUrVuXp_UJ15wPqWtckTnpEdgDsriq3rLSoCxou-prJ2VkQslfhf_su-4YuwVTR0PeMPPIj"/>
+</div>
+<div class="rounded-lg overflow-hidden h-[124px] group cursor-pointer relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="The outdoor terrace of a seaside cafe at sunset. Comfortable white wicker chairs with navy cushions are arranged around small tables. The golden hour light casts a warm glow over everything, with the shimmering ocean water in the background. Peaceful and luxurious vacation vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhRxaM_S7FHxB16NYCyKtGHw61dBA72geLriL5SFrwqe7CjFKWQq3R5wEs0kdUQlhu6en49pBzjHFR9Z-S6-WIeGgD_yW13_wl1iF8hWy6JYRyMHGdr0rLC46M9qplDQe2p52qaAw7rxTCFqrAWaA2bB2GCLi8_vMoaXXMEVJhfU0fQbFjAOvluSVwg9wve32rOMXs8DLjUP0sVOTVgQzA5laf-lUNUi-OfvyhuLapIQntazN_5Bmm"/>
+</div>
+<div class="rounded-lg overflow-hidden h-[124px] group cursor-pointer relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional barista crafting a latte in a modern cafe setting. Focus is on the intricate latte art being poured into a blue ceramic cup. The background features polished espresso machines and ambient lighting. Clean, sharp, and inviting atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsqP_eVPikwhP9Z6EfEAuKJoe3NW5Ji6c23OUJNH33EN2GfrcNsRImuLUvpPowY-l4WYximruNKiS3LtVMN4DPZmo4hXbXk8sqTrRCJATEuq02pJAd8rLkIN_mxDt97ra2bOVWFi9ye8UoJ9AFLIOleYI_iCiMUGSZQLwHO1qXVOIatixxOZ8TU3qrhvbO7nAmU4FN10401Y7cQH0nbRyyw9bPFDqWOHNUIM-yGg4UNjsH1p2E8dZS"/>
+</div>
+<div class="rounded-lg overflow-hidden h-[124px] group cursor-pointer relative">
+<div class="absolute inset-0 bg-primary/60 flex items-center justify-center text-on-primary font-bold z-10">+1 Daha</div>
+<img class="w-full h-full object-cover" data-alt="An evening view of a modern bistro's bar area, featuring a long marble counter, designer pendant lights, and a well-stocked back bar with glowing bottles. The atmosphere is upscale and energetic, with a focus on interior design excellence and premium hospitality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAwNW_7rFcNfP14tD4fif0ScaGbZTkBO3snhpuWit0yvfqXedCYs3myAR4Q2k4fG2y6Clv34DGZjtT4XmYEq-vTyfNxxCiNe6URgl1un0lhyPWFV-Dfc_G9b28vd0L6uJlq5UJlhAX0HnlIrOxgzAGkQumQeg9I4-tDMzpyT8QMAbKj_g6LS9Ab5cwE0QsWl-Mlh6muSrcWRYZ4FPvUBsk2WDB6jSnrwM9X-sNElllXG4GM1L0nNky"/>
+</div>
+</div>
+</section>
+<!-- Location Card -->
+<section class="card-ambient rounded-xl p-6">
+<h3 class="font-label-md text-on-surface uppercase tracking-widest mb-4">Konum ve Adres</h3>
+<div class="flex gap-6">
+<div class="flex-1 h-48 rounded-lg overflow-hidden border border-outline-variant relative">
+<img class="w-full h-full object-cover" data-alt="A stylized map representation of a coastal city, showing the specific location of a business near a marina. The map uses a clean, light-mode design with primary navy blue accents for landmarks and roads. It looks like a high-end GPS or property management map interface." data-location="Bodrum, Turkey" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDp2nflBjR2EtySIU_JMwg0jkixR9Q_7xVGzN_kDE1bM597cF6_WhVXnJEDxvWrEfJfvj_UJ-cY7gE9ukY9IX74Ojw7EeDwCX9pEKXqAhK3t08mCMS8Og6wkU6Dgt1YyZQGm6gpLIDCaeHROVmVizYFbLoV4GIONeJQpgUbAeH3mvWc-Nwm7ZHWHQQauHbbD_FfTGJWtG_skrkm1cXs63WFDDOivuC_bJVvbhGXeuOfkPy0L-Gn7PTl"/>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+</div>
+<div class="w-64">
+<p class="text-label-sm text-on-surface-variant uppercase mb-2">Açık Adres</p>
+<p class="font-body-md text-on-surface leading-snug">
+                                    Yat Limanı Cad. No:14, <br/>
+                                    Marina Sitesi, Kat:1 <br/>
+                                    Bodrum / MUĞLA
+                                </p>
+<button class="mt-4 text-primary font-label-md flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[18px]">directions</span>
+                                    Haritada Aç
+                                </button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column (Narrow) -->
+<div class="col-span-4 space-y-stack-md">
+<!-- Application Summary -->
+<section class="card-ambient rounded-xl p-6 bg-surface-container-low border-none">
+<h3 class="font-label-md text-on-surface mb-4">Başvuru Özeti</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant text-label-sm">Başvuru Tarihi</span>
+<span class="font-label-md text-on-surface">12 Mayıs 2024</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant text-label-sm">Başvuran Kişi</span>
+<span class="font-label-md text-on-surface">Murat Aksoy</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant text-label-sm">Seçilen Paket</span>
+<span class="px-2 py-0.5 bg-primary text-on-primary text-[10px] rounded font-bold">PREMIUM</span>
+</div>
+<div class="flex justify-between items-center pt-2 border-t border-outline-variant">
+<span class="text-on-surface-variant text-label-sm">Durum</span>
+<span class="flex items-center gap-1 text-tertiary font-bold text-label-sm">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                                    İncelemede
+                                </span>
+</div>
+</div>
+</section>
+<!-- Documents List -->
+<section class="card-ambient rounded-xl p-6">
+<h3 class="font-label-md text-on-surface mb-4">Yüklenen Belgeler</h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 rounded-lg border border-outline-variant hover:bg-surface transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">description</span>
+<div>
+<p class="text-label-sm font-label-md text-on-surface">Vergi Levhası</p>
+<p class="text-[10px] text-on-surface-variant">PDF • 2.4 MB</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">download</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg border border-outline-variant hover:bg-surface transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+<div>
+<p class="text-label-sm font-label-md text-on-surface">İmza Sirküleri</p>
+<p class="text-[10px] text-on-surface-variant">PDF • 1.1 MB</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">download</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg border border-outline-variant hover:bg-surface transition-colors cursor-pointer group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">assignment</span>
+<div>
+<p class="text-label-sm font-label-md text-on-surface">İşletme Ruhsatı</p>
+<p class="text-[10px] text-on-surface-variant">JPG • 4.8 MB</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">download</span>
+</div>
+</div>
+</section>
+<!-- Admin Notes -->
+<section class="card-ambient rounded-xl p-6">
+<h3 class="font-label-md text-on-surface mb-4">Admin Notları</h3>
+<textarea class="w-full h-32 p-3 rounded-lg border border-outline-variant bg-background text-body-md focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all resize-none" placeholder="Onay süreci için notlarınızı buraya ekleyin..."></textarea>
+<div class="flex items-center gap-2 mt-4 text-on-surface-variant">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" id="notify-user" type="checkbox"/>
+<label class="text-label-sm" for="notify-user">İşletme sahibini bilgilendir</label>
+</div>
+<button class="w-full mt-4 py-2 bg-surface-container-highest text-on-surface font-label-md rounded-lg hover:bg-surface-container-high transition-colors">
+                            Notu Kaydet
+                        </button>
+</section>
+<!-- Quick Support -->
+<div class="p-6 rounded-xl bg-primary/5 border border-primary/10">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary">info</span>
+<div>
+<p class="text-label-sm font-bold text-primary">Yardım Gerekiyor mu?</p>
+<p class="text-[12px] text-on-surface-variant mt-1 leading-normal">Bu işletme ile ilgili şüpheli bir durum fark ederseniz denetim ekibine raporlayabilirsiniz.</p>
+<button class="mt-2 text-primary font-bold text-[12px] hover:underline underline-offset-4">Rapor Oluştur</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer info -->
+<footer class="mt-stack-lg pt-stack-md border-t border-outline-variant text-center">
+<p class="text-label-sm text-on-surface-variant">© 2024 Şehir Paneli Yönetim Sistemi. Tüm hakları saklıdır.</p>
+</footer>
+</main>
+</div>
+<!-- Interaction Script -->
+<script>
+        // Simple micro-interaction for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.innerText.includes('Onayla')) {
+                    const originalContent = this.innerHTML;
+                    this.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Onaylanıyor...';
+                    this.disabled = true;
+                    setTimeout(() => {
+                        this.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Tamamlandı';
+                        this.classList.replace('bg-primary', 'bg-secondary');
+                    }, 1500);
+                }
+            });
+        });
+
+        // Toggle Active State Navigation (from Instruction Logic)
+        const navItems = document.querySelectorAll('aside nav a');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                navItems.forEach(i => {
+                    i.className = 'flex items-center gap-base text-surface-variant hover:text-on-tertiary px-4 py-3 mx-2 transition-colors';
+                });
+                item.className = 'flex items-center gap-base bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 mx-2';
+            });
+        });
+    </script>
+</body></html>

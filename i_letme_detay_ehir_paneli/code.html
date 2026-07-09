@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gaziantep Mutfağı - Pozcu | Şehir Paneli</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#6cf8bb",
+                    "secondary-fixed-dim": "#4edea3",
+                    "surface-tint": "#4059aa",
+                    "tertiary": "#3e2400",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "on-background": "#0b1c30",
+                    "on-surface": "#0b1c30",
+                    "on-secondary-container": "#00714d",
+                    "surface-container-low": "#eff4ff",
+                    "background": "#f8f9ff",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "error": "#ba1a1a",
+                    "on-primary": "#ffffff",
+                    "outline": "#757682",
+                    "on-surface-variant": "#444651",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#e5eeff",
+                    "surface": "#f8f9ff",
+                    "secondary": "#006c49",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#cbdbf5",
+                    "surface-bright": "#f8f9ff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "primary-fixed": "#dce1ff",
+                    "primary-container": "#1e3a8a",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#d3e4fe",
+                    "on-primary-container": "#90a8ff",
+                    "surface-container-high": "#dce9ff",
+                    "tertiary-container": "#5c3800",
+                    "on-tertiary-fixed": "#2a1700",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "primary": "#00236f",
+                    "on-primary-fixed-variant": "#264191",
+                    "inverse-surface": "#213145",
+                    "on-primary-fixed": "#00164e",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-variant": "#d3e4fe",
+                    "inverse-primary": "#b6c4ff",
+                    "secondary-fixed": "#6ffbbe",
+                    "outline-variant": "#c5c5d3",
+                    "on-tertiary-container": "#ef9900",
+                    "on-secondary-fixed": "#002113",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#ffddb8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "base": "8px",
+                    "stack-lg": "48px",
+                    "gutter": "24px",
+                    "stack-sm": "12px",
+                    "container-max": "1280px",
+                    "margin-desktop": "40px",
+                    "stack-md": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "headline-xl": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 200px);
+            gap: 12px;
+        }
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(4, 150px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased">
+<!-- TopNavBar -->
+<header class="bg-surface shadow-sm sticky top-0 z-50 h-20 flex items-center">
+<nav class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-20">
+<div class="flex items-center gap-stack-md">
+<span class="font-headline-md text-headline-md font-bold text-primary">Şehir Paneli</span>
+<div class="hidden md:flex gap-6">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Kategoriler</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Kampanyalar</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Etkinlikler</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Mersin Rehberi</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-md w-48" placeholder="İşletme ara..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary cursor-pointer">location_on</span>
+<span class="material-symbols-outlined text-primary cursor-pointer">notifications</span>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-md transition-transform active:scale-95">Giriş Yap</button>
+</div>
+</div>
+</nav>
+</header>
+<main class="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-md">
+<!-- Hero Section -->
+<section class="relative rounded-xl overflow-hidden mb-stack-md shadow-lg">
+<div class="h-64 md:h-[400px] w-full relative">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+<div class="w-full h-full" data-alt="A cinematic wide-angle shot of a luxurious restaurant interior in Mersin, Turkey. The space features warm wooden accents, elegant brass chandeliers, and a modern open kitchen. Soft ambient lighting creates an inviting, premium atmosphere, with large windows showing a hint of the Mediterranean coast at dusk. The overall style is professional, high-end, and sophisticated." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCcE8rwLVqTaqOcylJj9BFFoIQU96sN2OGxMDIMO3CONZ1FKCmUWHvx44DRMSexvSkovCdJfbNla5m9D9fPXtief5awfn_E6viNWl4nseqx7jqnmYeEniFzDRk_5Nre1F5GRFD4Ep7DcT6t4oXfplpeJ_IJS1ErjevvEQk9j65T0dG_ygC1Y9s8zH5OQFSeZmRKTISetYSgGONomnxZVbdXvXC0m1liF7AvKkpl4XCBggdf8nnxfZo-')"></div>
+</div>
+<div class="absolute bottom-0 left-0 w-full p-6 md:p-10 z-20 flex flex-col md:flex-row md:items-end gap-6">
+<div class="w-24 h-24 md:w-32 md:h-32 rounded-xl border-4 border-surface overflow-hidden shadow-xl shrink-0 bg-white">
+<img class="w-full h-full object-cover" data-alt="A clean, professional logo for a high-end Gaziantep cuisine restaurant called 'Gaziantep Mutfağı - Pozcu'. The logo features a minimalist icon representing a chef's hat and a sprig of pistachio, using deep navy and gold colors on a white background. The design is modern, elegant, and corporate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-_rpSaYmHM6JIIVNGKnFbtep6bepqIj-GiN_WsQh20MNyvAO1cgpXyjfk74TrAJG4LjVYweHHwBS-G0VPHx19wcbCCzygNa8wd7FH5rVVxGsUvw-slJwwXVxg7STSYCFyD9ySgFsmxREi7J97F0mzmDkZ1q-R6m2KbtQuKCerIHTszHbhEUc6sbpF0QGS1BSwYNCleYhgHe6RjS4DDbJ2kevCQWKPrKnAhpKQIPenkEo5Ey0Sb6go"/>
+</div>
+<div class="flex-grow">
+<div class="flex flex-wrap items-center gap-3 mb-2">
+<h1 class="text-white font-headline-xl text-headline-xl-mobile md:text-headline-xl">Gaziantep Mutfağı - Pozcu</h1>
+<span class="bg-secondary text-on-secondary px-3 py-1 rounded-full text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">verified</span> Doğrulanmış
+                        </span>
+</div>
+<div class="flex items-center gap-4 text-white/90 font-label-md">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary-fixed" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold">4.9</span>
+<span class="opacity-75">(1,240 Yorum)</span>
+</div>
+<span>•</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">restaurant</span> Restoran &amp; Gastronomi
+                        </span>
+<span>•</span>
+<span>Pozcu, Yenişehir</span>
+</div>
+</div>
+<div class="flex gap-3 mt-4 md:mt-0">
+<button class="bg-secondary-container text-on-secondary-container px-6 py-3 rounded-xl font-label-md flex items-center gap-2 hover:bg-secondary-fixed-dim transition-all shadow-md">
+<span class="material-symbols-outlined">call</span> Hemen Ara
+                    </button>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md flex items-center gap-2 hover:opacity-90 transition-all shadow-md">
+<span class="material-symbols-outlined">directions</span> Yol Tarifi
+                    </button>
+</div>
+</div>
+</section>
+<!-- Primary Action Links (Quick Access) -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-stack-md">
+<a class="bg-surface-container-low p-4 rounded-xl flex items-center gap-3 border border-outline-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary text-3xl">chat</span>
+<div>
+<p class="text-label-md font-bold">WhatsApp</p>
+<p class="text-label-sm text-on-surface-variant">Anında Mesaj Gönder</p>
+</div>
+</a>
+<a class="bg-surface-container-low p-4 rounded-xl flex items-center gap-3 border border-outline-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-primary text-3xl">language</span>
+<div>
+<p class="text-label-md font-bold">Web Sitesi</p>
+<p class="text-label-sm text-on-surface-variant">Menüyü İnceleyin</p>
+</div>
+</a>
+<a class="bg-surface-container-low p-4 rounded-xl flex items-center gap-3 border border-outline-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-error text-3xl">favorite</span>
+<div>
+<p class="text-label-md font-bold">Favorilere Ekle</p>
+<p class="text-label-sm text-on-surface-variant">Listene Kaydet</p>
+</div>
+</a>
+<a class="bg-surface-container-low p-4 rounded-xl flex items-center gap-3 border border-outline-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-tertiary-container text-3xl">share</span>
+<div>
+<p class="text-label-md font-bold">Paylaş</p>
+<p class="text-label-sm text-on-surface-variant">Arkadaşlarına Gönder</p>
+</div>
+</a>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Left Column -->
+<div class="lg:col-span-2 flex flex-col gap-stack-md">
+<!-- About Section -->
+<section class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant">
+<h2 class="font-headline-md text-headline-md mb-4 text-primary">Hakkında</h2>
+<p class="text-on-surface-variant leading-relaxed text-body-md mb-6">
+                        Gaziantep'in binlerce yıllık mutfak kültürünü Mersin'in kalbi Pozcu'ya taşıyoruz. Ustalıkla hazırlanan kebap çeşitlerimiz, taş fırından yeni çıkmış çıtır lahmacunlarımız ve taze antep fıstıklı baklavalarımızla misafirlerimize unutulmaz bir gastronomi deneyimi sunuyoruz. 1985'ten beri süregelen geleneksel tariflerimizi, modern sunum teknikleri ve en taze yerel malzemelerle birleştiriyoruz. Geniş ve ferah mekanımızda aile toplantılarınızdan iş yemeklerinize kadar her türlü organizasyonunuzda sizleri ağırlamaktan onur duyarız.
+                    </p>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-6 border-t border-outline-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">restaurant_menu</span>
+<span class="text-label-md">Zengin Menü</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">outdoor_grill</span>
+<span class="text-label-md">Geleneksel Kebap</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">groups</span>
+<span class="text-label-md">Grup Yemekleri</span>
+</div>
+</div>
+</section>
+<!-- Services List -->
+<section class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant">
+<h2 class="font-headline-md text-headline-md mb-6 text-primary">Hizmetler</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex items-center p-3 rounded-lg bg-surface-container-low gap-4">
+<span class="material-symbols-outlined p-2 bg-white rounded-full text-secondary">check_circle</span>
+<span class="font-label-md">Paket Servis</span>
+</div>
+<div class="flex items-center p-3 rounded-lg bg-surface-container-low gap-4">
+<span class="material-symbols-outlined p-2 bg-white rounded-full text-secondary">check_circle</span>
+<span class="font-label-md">Vale Hizmeti</span>
+</div>
+<div class="flex items-center p-3 rounded-lg bg-surface-container-low gap-4">
+<span class="material-symbols-outlined p-2 bg-white rounded-full text-secondary">check_circle</span>
+<span class="font-label-md">Çocuk Oyun Alanı</span>
+</div>
+<div class="flex items-center p-3 rounded-lg bg-surface-container-low gap-4">
+<span class="material-symbols-outlined p-2 bg-white rounded-full text-secondary">check_circle</span>
+<span class="font-label-md">Ücretsiz Wi-Fi</span>
+</div>
+<div class="flex items-center p-3 rounded-lg bg-surface-container-low gap-4">
+<span class="material-symbols-outlined p-2 bg-white rounded-full text-secondary">check_circle</span>
+<span class="font-label-md">Açık Hava Oturma</span>
+</div>
+<div class="flex items-center p-3 rounded-lg bg-surface-container-low gap-4">
+<span class="material-symbols-outlined p-2 bg-white rounded-full text-secondary">check_circle</span>
+<span class="font-label-md">Kredi Kartı Geçerli</span>
+</div>
+</div>
+</section>
+<!-- Photo Gallery (Bento Style) -->
+<section>
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-md text-headline-md text-primary">Fotoğraflar</h2>
+<button class="text-primary font-label-md hover:underline">Tümünü Gör</button>
+</div>
+<div class="bento-grid">
+<div class="col-span-2 row-span-2 rounded-xl overflow-hidden shadow-md group">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="A macro photograph of a perfectly grilled Adana Kebab served on a bed of warm pita bread with charred peppers and tomatoes. The steam is visible, and the colors are rich with deep browns, vibrant reds, and fresh green parsley. Soft, professional lighting highlights the texture of the meat and spices." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAFB4kX0eMhZ1jKGxfuB_oG_Eq_LC72ioRhfrolVKGMGZoljkF3dhqTvwFHjaZOori1c8_ktKCI7rCRbRP8CHBYJK7AAEnrdONb1PEbsL05Zh6NNfjwXjSx9wqseOwpH2Z_CJv46kv_o9tdkE58bophEiX0a5qWgO-xgF3EtnS6R2vTbott92HVRQC3455bFuJRVAsDZuyvodq5YjthG7JowDDu0EyyflI6EJANf7YBYoI-cpzaikzS')"></div>
+</div>
+<div class="col-span-1 row-span-1 rounded-xl overflow-hidden shadow-md group">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="A top-down shot of a variety of traditional Gaziantep appetizers (mezes) arranged on a rustic wooden table. Includes hummus with pine nuts, spicy pepper paste, yogurt dip, and fresh seasonal salad. The composition is artistic and vibrant, fitting a premium culinary brand." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAjMl63FzC_opZRhXH0Pfit_cbDRH5Ja2B4LGdCXWY9zfPEFg63OmmKZ7bnsYPzQBwi4Iv2whZJRsSG-gOKMuYw5XxvzqWGujBGKL5s4LQFh87HQhgEZ7Y7Nesu0Ghy94nA06afy0nQybPcyKtz-rztl9xvWaMy6-8wl9pNaord344YS5iEAuvOteHOh-a6Zz6LO8YQZAW5Jg_eYWs9Ylpz9oB_YCk0Ku5FwcyKAk707EYTm42PoJWi')"></div>
+</div>
+<div class="col-span-1 row-span-1 rounded-xl overflow-hidden shadow-md group">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="A close-up of traditional Turkish baklava, layered with crispy pastry and vibrant green crushed pistachios, dripping with honey syrup. The image captured the golden, flaky texture and rich, sweet essence of the dessert under warm gallery lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBhpRriQynoeyK5fmByu9-8REWnRnEd-Qcr2gX94nZdrQ4QSxF864-T-acTXpaQk6PSrlM7uXpKn0Bu6M1vZqKYXFxLQ0bKz2Iffd2YkphDF3xeGbSPJvjjUlpKI7YSrna5NRcDUhb9N7gg8am_f6LekQC8uAWWgUffyexC3S9oBWX1n1sIr1dhsDblSqrLkLf233AKCQ2o_DhGm_ekojXCdYikXlhQYFr6tn6ypp6l9ZHYxW4dyUeb')"></div>
+</div>
+<div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-md group">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="A wide shot of the restaurant's elegant dining area during the golden hour. Sun beams through large windows, illuminating the contemporary furniture and sophisticated table settings. The environment looks clean, upscale, and welcoming." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBkacfb29Jr_KJyMXh2cSUspdxwJnUEOZ3R0mz3Xjz_fgnETsO6wR5T-aNs5V-y7A75R5gQZKPJh6TW5et1nP8UNm8S3yYhqQJzMwNrU0rof1amK4zrQq6wJAF6JZ1s7IS_KJJGzUhFdb9iL3IXCf8Amil5vwS0wXGZJDaXFrmdzWE0cnXzRL_DVv3uaYyna3DObxFphlEv2_9R00_9yJ05W4veGFZc-WF2G3sjEMv7dCQLHunVscrg')"></div>
+</div>
+</div>
+</section>
+<!-- Reviews Section -->
+<section class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant">
+<div class="flex justify-between items-center mb-8">
+<h2 class="font-headline-md text-headline-md text-primary">Yorumlar</h2>
+<button class="bg-primary-container text-on-primary-container px-5 py-2 rounded-lg font-label-md hover:opacity-90">Yorum Yaz</button>
+</div>
+<div class="flex flex-col gap-8">
+<!-- Review 1 -->
+<div class="border-b border-outline-variant pb-8 last:border-0 last:pb-0">
+<div class="flex items-center gap-4 mb-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="A professional headshot of a smiling Turkish woman in her early 30s. She has a friendly expression and is set against a soft-focus urban background. The lighting is natural and flattering, embodying a trustworthy reviewer persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6FX6oAorZFZnYa0RYQGH9C0HRmN_wyyjr4Rs-0HUW_xN7gkCPZJWXbWxeso4ovcj-dwDG1yq5QL_cQQ40WWYRIpLfVIqel6_EaPEgDhyABJw-rUhQWcAK9y2ewuvZ3aymecUuSfBCgp2EnDaNnx3ebGjD64GFmO8-I2m-uG_XdP7QYdyP1W5rKjt9gxV5gqbm5o8PG5jz15ASTaCPRvnX0QbY0rH3wrbLPpLdkrRLO7AeFngBBgVt"/>
+<div>
+<h4 class="font-bold text-on-surface">Zeynep Demir</h4>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary-fixed text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary-fixed text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary-fixed text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary-fixed text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary-fixed text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm text-on-surface-variant ml-2">2 gün önce</span>
+</div>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-3">Mersin'de yediğim en iyi lahmacun ve kebap diyebilirim. Servis çok hızlıydı, personel inanılmaz ilgili. Özellikle fıstıklı baklavayı mutlaka denemelisiniz. Mekan çok ferah ve temiz.</p>
+<div class="flex gap-2">
+<span class="bg-surface-container px-3 py-1 rounded-full text-label-sm">Yemek Kalitesi</span>
+<span class="bg-surface-container px-3 py-1 rounded-full text-label-sm">Servis</span>
+</div>
+</div>
+<!-- Review 2 -->
+<div class="border-b border-outline-variant pb-8 last:border-0 last:pb-0">
+<div class="flex items-center gap-4 mb-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="A portrait of a middle-aged man with a professional appearance, wearing a casual polo shirt. He is outdoors with soft greenery in the background, looking into the camera with a satisfied smile. High-quality portrait photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiElQ5xgVmM3ObAsDF7ffeeQEkahwW3gMampm8Xadehdb4Rnf2JZsln6P11eC7jbVW-L7th3y22g7oskjMX3qi51rMT2Rk1uhG24JCUwSOhSKce9QcKTGhAPz-Nc9QRBM9wt89YwolZB8m4nmm0aUqhb8KNNBTBB6gorPML37UrsR35ZgHo2uBJhqBmULc1pVeT1hMBj0f4K2COHqPDIglqwLKRS3Ey4IWEYe4rCEL0kriNLDXc67G"/>
+<div>
+<h4 class="font-bold text-on-surface">Murat Kaya</h4>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary-fixed text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary-fixed text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary-fixed text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary-fixed text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-outline-variant text-[16px]">star</span>
+<span class="text-label-sm text-on-surface-variant ml-2">1 hafta önce</span>
+</div>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-3">Her şey çok güzeldi ancak hafta sonu akşam saatlerinde biraz sıra beklemek zorunda kaldık. Rezerve yaptırmanızı öneririm. Mezeler çok taze ve çeşitliydi.</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column (Sidebar) -->
+<aside class="flex flex-col gap-stack-md">
+<!-- Opening Hours -->
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-bold text-headline-md text-primary">Çalışma Saatleri</h3>
+<span class="px-3 py-1 rounded-full text-label-sm font-bold bg-secondary/10 text-secondary border border-secondary/20">Şu An Açık</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-label-md">
+<span class="text-on-surface-variant">Pazartesi</span>
+<span class="font-medium">09:00 - 23:00</span>
+</div>
+<div class="flex justify-between text-label-md font-bold text-primary">
+<span>Salı (Bugün)</span>
+<span>09:00 - 23:00</span>
+</div>
+<div class="flex justify-between text-label-md">
+<span class="text-on-surface-variant">Çarşamba</span>
+<span class="font-medium">09:00 - 23:00</span>
+</div>
+<div class="flex justify-between text-label-md">
+<span class="text-on-surface-variant">Perşembe</span>
+<span class="font-medium">09:00 - 23:00</span>
+</div>
+<div class="flex justify-between text-label-md">
+<span class="text-on-surface-variant">Cuma</span>
+<span class="font-medium">09:00 - 00:00</span>
+</div>
+<div class="flex justify-between text-label-md">
+<span class="text-on-surface-variant">Cumartesi</span>
+<span class="font-medium">09:00 - 00:00</span>
+</div>
+<div class="flex justify-between text-label-md">
+<span class="text-on-surface-variant">Pazar</span>
+<span class="font-medium">10:00 - 23:00</span>
+</div>
+</div>
+</section>
+<!-- Contact Info -->
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant">
+<h3 class="font-bold text-headline-md text-primary mb-6">İletişim Bilgileri</h3>
+<div class="space-y-6">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<p class="text-label-md text-on-surface-variant">Gazi Mustafa Kemal Bulvarı No: 42, Pozcu, Yenişehir, Mersin</p>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary">call</span>
+<p class="text-label-md text-on-surface-variant">+90 (324) 123 45 67</p>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary">mail</span>
+<p class="text-label-md text-on-surface-variant">iletisim@antepmutfagi.com</p>
+</div>
+<div class="flex gap-4 pt-4 border-t border-outline-variant">
+<a class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-all" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-all" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
+</a>
+</div>
+</div>
+</section>
+<!-- Map Widget -->
+<section class="bg-surface-container-lowest p-2 rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="h-64 w-full rounded-lg" data-alt="A stylized digital map of the Pozcu neighborhood in Mersin, Turkey. The map shows clean streets, local landmarks, and a prominent blue location pin marking the restaurant's position. The colors are muted and professional, consistent with the light-mode UI design." data-location="Mersin, Turkey" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBAeG1z5NZhzZ5llReQHyBqzmyx3y_UVZ0VEJVtxzZnqppnQAwfTULj8E7eLSoDbjsycaWywXRzD0mOEEsVWWKsZSqWW6Ytyar1OUFMYXyVi5JEHjWZ6ksxj96bTE8a7kXA5eyOTMaScjwLhpKqD0fYwauXenZwSWBihc3pexcRBUTYNIvztBOCrrNiWNdTMkY-Xs9m5HRpameKCsv9CKYhQR2esuN73AbAgKVvt33sRyUpmdbyKbFs')"></div>
+<div class="p-4">
+<button class="w-full bg-surface-container-high text-primary py-3 rounded-lg font-label-md flex items-center justify-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-all">
+<span class="material-symbols-outlined">map</span> Google Haritalarda Aç
+                        </button>
+</div>
+</section>
+</aside>
+</div>
+<!-- Similar Businesses Section -->
+<section class="mt-stack-lg">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-md text-headline-md text-primary">Benzer İşletmeler</h2>
+<div class="flex gap-2">
+<button class="p-2 rounded-full bg-surface-container-high hover:bg-primary-container transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="p-2 rounded-full bg-surface-container-high hover:bg-primary-container transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Business Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant hover:shadow-md transition-shadow group cursor-pointer">
+<div class="h-40 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="An inviting exterior shot of a local fish restaurant in Mersin, with white and blue decor reflecting the Mediterranean sea. The lighting is bright and cheerful." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMPeZ4ZQKSN1O9axMT03f4HHJ-XyKcImTmuifxluXAt-o_UfX6Y-gERtuK7ebwnR8Wx9rJq1z9yYto11d8fNQU-VKlhrRcpeBfzsuEz44-nZvWXjqy8HW0PtQ7v0eHl9ih0jUbjJvT0RwT-U25sHaPnqo44rIENKOTUbxn9dkOlu0g8CZilSIVNL941LelTaCLJrpL2zUiChECnsvxtOOMmRx1gvn3aM8wf3GPZ0O22aKKOuYuPTp9"/>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-label-md mb-1">Mersin Balıkçısı</h4>
+<div class="flex items-center gap-1 mb-2">
+<span class="material-symbols-outlined text-tertiary-fixed text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm font-bold">4.7</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Deniz Ürünleri • Mezitli</p>
+</div>
+</div>
+<!-- Business Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant hover:shadow-md transition-shadow group cursor-pointer">
+<div class="h-40 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A modern cafe interior in Mersin with greenery, minimalist furniture, and large windows. The lighting is airy and soft." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnfwc-28OKHf8MYFHulq_TCGau9rqUnS20TOZom1OSUlj2_HJa6SEHEvoqITttpLmUJghZj7JVjhOlLJFl59rqIpclVPoZJpSE_vlGNKTyog2FdMnIpMLqbEt-ohvA1_OIqH4wtniLHcLxPZCID19377dDvBAU06wAuy1y0MW_ca9Er9NAr380fYfB99u0pZqpuUqtXCLx0hWpXsG2HS9Ciae_KN-hNX_GsGkCJER1Oktwj4XsTp78"/>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-label-md mb-1">Pozcu Kahve Evi</h4>
+<div class="flex items-center gap-1 mb-2">
+<span class="material-symbols-outlined text-tertiary-fixed text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm font-bold">4.8</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Kahvaltı &amp; Kahve • Pozcu</p>
+</div>
+</div>
+<!-- Business Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant hover:shadow-md transition-shadow group cursor-pointer">
+<div class="h-40 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A traditional Turkish pastry shop featuring trays of colorful desserts and baklava. The lighting is warm and nostalgic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx_nTLDLW5FcEwNDAMVUhbHf4CH7H7bLuVV-N1Dyoe40MEPuiFFGJ3OwKvJquAoIDA2S7qf78EzfYnRP4yD-pKMJSaQTqO9CxCSUHT4qwjNJjwGw6HssnbJETLygLVv2AHv-OSrdQDf_VN6P-5o3r5BA465ecfe5hua_gsXwzdnweW7BeVfo4xB8emvOOhRRn-roxSANAQ7J2s34SOizL_ZT127qS-IrH6oqk7OiXnvQo3PGvfsYl5"/>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-label-md mb-1">Künefe Sarayı</h4>
+<div class="flex items-center gap-1 mb-2">
+<span class="material-symbols-outlined text-tertiary-fixed text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm font-bold">4.9</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Tatlı • Yenişehir</p>
+</div>
+</div>
+<!-- Business Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant hover:shadow-md transition-shadow group cursor-pointer">
+<div class="h-40 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A stylish steakhouse interior with dark wood, leather seating, and atmospheric lighting. High-end dining vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOWXwPQ5uO_0If-Q9kyTRiXg2WzqNu6HEb4NZDSo9FX6Kn21iZw1uxIXd0iHPUEtbUfmqotpsui66ppU_ZKTxhLAa_7iq6LrWgGL8MN-Z9qiRNrVzjqh_UFVmKdw4ot46Jkvh5aOOTcurWIMIZS-M-EdbvQjMj2M3caGxBDGqHWxRV177Kwp29ljIbfQkCKGV-hd47vg14JEfmLFyPbI_v5f6Pob6y1OjXgCXjt9r-_40ggvT1sOzQ"/>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-label-md mb-1">Aslan Et Restoranı</h4>
+<div class="flex items-center gap-1 mb-2">
+<span class="material-symbols-outlined text-tertiary-fixed text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm font-bold">4.6</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Kebap &amp; Et • Pozcu</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant mt-stack-lg">
+<div class="w-full py-stack-lg px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="flex flex-col gap-4">
+<span class="font-headline-lg text-headline-lg font-black text-primary">Şehir Paneli</span>
+<p class="font-body-md text-body-md text-on-surface-variant">© 2024 Şehir Paneli. Tüm hakları saklıdır. Mersin'ın dijital rehberi.</p>
+</div>
+<div class="flex flex-col gap-3">
+<h5 class="font-label-md font-bold text-primary uppercase">Kurumsal</h5>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Hakkımızda</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">İletişim</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">İşletme Kaydı</a>
+</div>
+<div class="flex flex-col gap-3">
+<h5 class="font-label-md font-bold text-primary uppercase">Destek</h5>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Kullanım Koşulları</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Gizlilik Politikası</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Sıkça Sorulan Sorular</a>
+</div>
+<div class="flex flex-col gap-3">
+<h5 class="font-label-md font-bold text-primary uppercase">Sosyal Medya</h5>
+<div class="flex gap-4">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">camera</span></a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">share</span></a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Smooth scroll interaction and simple interactions
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+            btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+        });
+    </script>
+</body></html>

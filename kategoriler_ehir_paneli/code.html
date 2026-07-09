@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mersin İşletmeleri | Şehir Paneli</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#6cf8bb",
+                    "secondary-fixed-dim": "#4edea3",
+                    "surface-tint": "#4059aa",
+                    "tertiary": "#3e2400",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "on-background": "#0b1c30",
+                    "on-surface": "#0b1c30",
+                    "on-secondary-container": "#00714d",
+                    "surface-container-low": "#eff4ff",
+                    "background": "#f8f9ff",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "error": "#ba1a1a",
+                    "on-primary": "#ffffff",
+                    "outline": "#757682",
+                    "on-surface-variant": "#444651",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#e5eeff",
+                    "surface": "#f8f9ff",
+                    "secondary": "#006c49",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#cbdbf5",
+                    "surface-bright": "#f8f9ff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "primary-fixed": "#dce1ff",
+                    "primary-container": "#1e3a8a",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#d3e4fe",
+                    "on-primary-container": "#90a8ff",
+                    "surface-container-high": "#dce9ff",
+                    "tertiary-container": "#5c3800",
+                    "on-tertiary-fixed": "#2a1700",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "primary": "#00236f",
+                    "on-primary-fixed-variant": "#264191",
+                    "inverse-surface": "#213145",
+                    "on-primary-fixed": "#00164e",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-variant": "#d3e4fe",
+                    "inverse-primary": "#b6c4ff",
+                    "secondary-fixed": "#6ffbbe",
+                    "outline-variant": "#c5c5d3",
+                    "on-tertiary-container": "#ef9900",
+                    "on-secondary-fixed": "#002113",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#ffddb8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "base": "8px",
+                    "stack-lg": "48px",
+                    "gutter": "24px",
+                    "stack-sm": "12px",
+                    "container-max": "1280px",
+                    "margin-desktop": "40px",
+                    "stack-md": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "headline-xl": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(30, 58, 138, 0.05);
+        }
+        .card-shadow:hover {
+            box-shadow: 0 8px 30px rgba(30, 58, 138, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #eff4ff;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c5c5d3;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- TopNavBar -->
+<header class="bg-surface shadow-sm sticky top-0 z-50">
+<nav class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-20">
+<div class="flex items-center gap-gutter">
+<a class="font-headline-md text-headline-md font-bold text-primary" href="#">Şehir Paneli</a>
+<div class="hidden md:flex gap-stack-md items-center h-full">
+<a class="font-body-md text-body-md text-primary border-b-2 border-primary pb-1 font-semibold" href="#">Kategoriler</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Kampanyalar</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Etkinlikler</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Mersin Rehberi</a>
+</div>
+</div>
+<div class="flex items-center gap-stack-md">
+<div class="hidden lg:flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant focus-within:border-primary transition-all">
+<span class="material-symbols-outlined text-outline mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-64" placeholder="İşletme veya hizmet ara..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">location_on</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">notifications</button>
+<button class="hidden md:block px-6 py-2 bg-primary text-on-primary rounded-full font-label-md hover:opacity-90 active:scale-95 transition-all">Giriş Yap</button>
+<button class="md:hidden material-symbols-outlined">menu</button>
+</div>
+</div>
+</nav>
+</header>
+<main class="max-w-container-max mx-auto px-margin-desktop py-stack-md">
+<!-- Breadcrumbs -->
+<nav class="flex items-center text-label-sm text-on-surface-variant gap-2 mb-8">
+<a class="hover:text-primary" href="#">Ana Sayfa</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary" href="#">Kategoriler</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-semibold">Mersin</span>
+</nav>
+<div class="flex flex-col lg:flex-row gap-gutter">
+<!-- Sidebar Filters -->
+<aside class="w-full lg:w-72 flex-shrink-0">
+<div class="sticky top-28 bg-surface-container-lowest p-stack-md rounded-xl border border-outline-variant flex flex-col gap-stack-md">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-[18px] text-primary">Filtrele</h2>
+<button class="text-label-sm text-primary-container font-semibold hover:underline">Temizle</button>
+</div>
+<!-- Category Filter -->
+<div class="space-y-3">
+<h3 class="font-label-md text-on-surface border-b border-outline-variant pb-2">Kategori</h3>
+<div class="flex flex-col gap-2 max-h-48 overflow-y-auto custom-scrollbar">
+<label class="flex items-center gap-3 cursor-pointer">
+<input checked="" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">Restoranlar</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">Sağlık &amp; Medikal</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">Profesyonel Hizmetler</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">Eğitim</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">Alışveriş</span>
+</label>
+</div>
+</div>
+<!-- Neighborhood Filter -->
+<div class="space-y-3">
+<h3 class="font-label-md text-on-surface border-b border-outline-variant pb-2">Semt / İlçe</h3>
+<div class="flex flex-col gap-2">
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">Pozcu</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">Mezitli</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">Yenişehir</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">Akdeniz</span>
+</label>
+</div>
+</div>
+<!-- Rating Filter -->
+<div class="space-y-3">
+<h3 class="font-label-md text-on-surface border-b border-outline-variant pb-2">Minimum Puan</h3>
+<div class="flex flex-col gap-2">
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="w-5 h-5 border-outline-variant text-primary focus:ring-primary" name="rating" type="radio"/>
+<span class="text-body-md flex items-center">4.5+ <span class="material-symbols-outlined text-[16px] text-tertiary-container ml-1" style="font-variation-settings: 'FILL' 1;">star</span></span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input checked="" class="w-5 h-5 border-outline-variant text-primary focus:ring-primary" name="rating" type="radio"/>
+<span class="text-body-md flex items-center">4.0+ <span class="material-symbols-outlined text-[16px] text-tertiary-container ml-1" style="font-variation-settings: 'FILL' 1;">star</span></span>
+</label>
+</div>
+</div>
+<!-- Status Filter -->
+<div class="space-y-3">
+<h3 class="font-label-md text-on-surface border-b border-outline-variant pb-2">Durum</h3>
+<div class="flex flex-col gap-2">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+<span class="ml-3 text-body-md">Şu an açık</span>
+</label>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+<span class="ml-3 text-body-md">Doğrulanmış</span>
+</label>
+</div>
+</div>
+<button class="w-full mt-4 py-3 bg-primary text-on-primary rounded-lg font-bold hover:opacity-90 transition-opacity">Filtreleri Uygula</button>
+</div>
+</aside>
+<!-- Content Area -->
+<section class="flex-grow">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-stack-md">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-primary leading-tight">Mersin İşletmeleri</h1>
+<p class="text-body-lg text-on-surface-variant mt-2">Mersin'deki en iyi restoranlar, hizmetler ve yerel işletmeleri keşfedin.</p>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-label-sm text-on-surface-variant whitespace-nowrap">Sıralama:</span>
+<select class="bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 font-label-md text-on-surface focus:ring-primary focus:border-primary">
+<option>En Popüler</option>
+<option>En Yüksek Puan</option>
+<option>En Yeni</option>
+<option>Mesafe (Yakın)</option>
+</select>
+</div>
+</div>
+<!-- Search Input Mobile/Alternative -->
+<div class="mb-stack-md lg:hidden">
+<div class="flex items-center bg-white shadow-sm px-4 py-3 rounded-xl border border-outline-variant">
+<span class="material-symbols-outlined text-outline mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full" placeholder="Pozcu restoranları..." type="text"/>
+</div>
+</div>
+<!-- Business Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Business Card 1 -->
+<div class="group bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden card-shadow transition-all duration-300 hover:-translate-y-1">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A modern, high-end Mediterranean restaurant interior in Mersin, Turkey. Large glass windows overlook a sunny coastal view. The interior features elegant navy blue furniture, marble tables, and warm golden lighting. The atmosphere is sophisticated and inviting, typical of a premium dining establishment in a coastal city." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDizPvE4orSl6NEVP_NVGz1dhi57ZFbLVB6VWpLzbwyxJx_oYDWU_03LcnLc0pwh-zIm9zz_HWHCfx-GMFxjKYdH-xtW5FGYjp0-Fnq7_VRug_R87BqD33ZfbmbpC3mcZSHf9fRzbg9w-AOONS_zzN5Yx_LbO3y08Y4Ve5yJazk551eHmD1fAJsSgS9Z-PrtxE06bLY-Cn_0ou9iQNwFgWinBMhDtthd-8Hr6GvLezvuPCohuozlBXL"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary px-3 py-1 rounded-full text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                Doğrulanmış
+                            </div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-primary hover:bg-white transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="p-stack-sm flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-label-sm text-on-secondary-container bg-secondary-container/20 px-2 py-0.5 rounded">Restoran</span>
+<h3 class="font-headline-md text-[20px] text-primary mt-1 group-hover:text-primary-container transition-colors">Marin Gourmet Restaurant</h3>
+</div>
+<div class="flex items-center gap-1 bg-tertiary-fixed text-on-tertiary-fixed px-2 py-1 rounded-lg">
+<span class="font-bold text-label-md">4.8</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-label-md">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                Mezitli, Mersin
+                            </div>
+<div class="mt-4 pt-4 border-t border-outline-variant flex items-center justify-between">
+<span class="text-label-sm text-secondary font-semibold flex items-center gap-1">
+<span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    Şu an açık
+                                </span>
+<button class="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-on-primary rounded-lg font-label-md transition-all">Detaylar</button>
+</div>
+</div>
+</div>
+<!-- Business Card 2 -->
+<div class="group bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden card-shadow transition-all duration-300 hover:-translate-y-1">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A clean, minimalist dental clinic reception area in Mersin, Turkey. Bright white walls, light wood textures, and soft blue accents create a calming healthcare environment. Professional lighting highlights a modern reception desk with digital displays. The style is contemporary, authoritative, and clean." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-9EqLvdPqIREDYJO3hmhM9Iyo0reaaDBjO1IQGMHb0qH4NilKIlFdeXqsGN-i11ZoPtj0g09RpkztMmaMmdguQz3O_9TNIGt0ELguCIirECCkjnP5eUXkQ_TfKBKH6cTkzmLOGXK2zAeQuQXlCpBS_azwZDKIw8axSA9ryxXljrmkw5paXadtm88mjkOpRCzd-8IUlZkN-Y4WOUS7-X_x01-IrQq95SPCaUrc24KIulqssOzrP81a"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary px-3 py-1 rounded-full text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                Doğrulanmış
+                            </div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-primary hover:bg-white transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="p-stack-sm flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-label-sm text-on-secondary-container bg-secondary-container/20 px-2 py-0.5 rounded">Sağlık</span>
+<h3 class="font-headline-md text-[20px] text-primary mt-1 group-hover:text-primary-container transition-colors">Akdeniz Ağız ve Diş Sağlığı</h3>
+</div>
+<div class="flex items-center gap-1 bg-tertiary-fixed text-on-tertiary-fixed px-2 py-1 rounded-lg">
+<span class="font-bold text-label-md">4.5</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-label-md">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                Yenişehir, Mersin
+                            </div>
+<div class="mt-4 pt-4 border-t border-outline-variant flex items-center justify-between">
+<span class="text-label-sm text-secondary font-semibold flex items-center gap-1">
+<span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    Şu an açık
+                                </span>
+<button class="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-on-primary rounded-lg font-label-md transition-all">Detaylar</button>
+</div>
+</div>
+</div>
+<!-- Business Card 3 -->
+<div class="group bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden card-shadow transition-all duration-300 hover:-translate-y-1">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A trendy, industrial-chic specialty coffee shop in the Pozcu district of Mersin. Exposed brick walls, hanging Edison bulbs, and baristas working at a sleek stainless steel espresso machine. The mood is energetic and youthful, with patrons sitting at communal wooden tables. Professional photography with warm, rich color tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvo1vc7JE0lwa1EjR3dqTZ_4DWH-5i_0IevbFVjz6_Pp_VbPsmaZt5ciiANvCQqum_vkSFgDZvaiATWKwJPWLh7jEl4MSW2-vXNNPsAspD3DkmcmVtsoJe34386l6hocPIKFgtJ35oVt6XBzgSQ5GSEJNEeFR3sBta7BjO_NlSz0C3FAeicqLRrpqOBV2wMVJeoj2f3OpK0AnLutWwRJjo6coVlx8spP5199B7lN7xqk4rDxGcBXlY"/>
+<div class="absolute top-4 left-4 bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">stars</span>
+                                Sponsorlu
+                            </div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-primary hover:bg-white transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="p-stack-sm flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-label-sm text-on-secondary-container bg-secondary-container/20 px-2 py-0.5 rounded">Cafe &amp; Kahve</span>
+<h3 class="font-headline-md text-[20px] text-primary mt-1 group-hover:text-primary-container transition-colors">The Hub Specialty Coffee</h3>
+</div>
+<div class="flex items-center gap-1 bg-tertiary-fixed text-on-tertiary-fixed px-2 py-1 rounded-lg">
+<span class="font-bold text-label-md">4.9</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-label-md">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                Pozcu, Mersin
+                            </div>
+<div class="mt-4 pt-4 border-t border-outline-variant flex items-center justify-between">
+<span class="text-label-sm text-secondary font-semibold flex items-center gap-1">
+<span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    Şu an açık
+                                </span>
+<button class="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-on-primary rounded-lg font-label-md transition-all">Detaylar</button>
+</div>
+</div>
+</div>
+<!-- Business Card 4 -->
+<div class="group bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden card-shadow transition-all duration-300 hover:-translate-y-1">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A modern hair salon and beauty center in Mersin, featuring large mirrors, minimalist white styling stations, and professional lighting equipment. The aesthetic is clean and upscale, utilizing a neutral color palette with gold metallic accents. The image captures a sense of luxury and personal care." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO7_2te0bgTQFRujkuGgGfciYisSuR2SFY1ZzvTlhKK9vPSAtnztT3exPfUqkyMif1zaDRr5EMLTABhq7zGM_DYcZRJWLiZnuZFSBnAI3Aq6aKpL9ww0So-SefFNRbZkU5kLGDC0TqITEaTmjNxP6-7fFdrkhx5yMiR-YZsbjZdfa0AhfWP2T7IwAAHRvD1mc66i2vdjGuGqDqRSa7RwLVC574EZsmJIa8ExxI1IsyLfEdSUI3Bw6x"/>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-primary hover:bg-white transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="p-stack-sm flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-label-sm text-on-secondary-container bg-secondary-container/20 px-2 py-0.5 rounded">Güzellik &amp; Bakım</span>
+<h3 class="font-headline-md text-[20px] text-primary mt-1 group-hover:text-primary-container transition-colors">Elite Beauty Center</h3>
+</div>
+<div class="flex items-center gap-1 bg-tertiary-fixed text-on-tertiary-fixed px-2 py-1 rounded-lg">
+<span class="font-bold text-label-md">4.2</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-label-md">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                Pozcu, Mersin
+                            </div>
+<div class="mt-4 pt-4 border-t border-outline-variant flex items-center justify-between">
+<span class="text-label-sm text-error font-semibold flex items-center gap-1">
+<span class="w-2 h-2 bg-error rounded-full"></span>
+                                    Kapalı
+                                </span>
+<button class="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-on-primary rounded-lg font-label-md transition-all">Detaylar</button>
+</div>
+</div>
+</div>
+<!-- Business Card 5 -->
+<div class="group bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden card-shadow transition-all duration-300 hover:-translate-y-1">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A spacious and modern fitness center in Mersin, equipped with high-tech gym machinery, rowers, and weight racks. The gym has high ceilings and an industrial look with cool-toned LED lighting. The environment looks motivating and clean, suitable for a professional city guide highlighting premium wellness spots." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPRTxpcqlHglnUJtTRqRiwfimCAxfpoWk4CfnxyDJV8CDXmdIfg01gIh4m5-Zg7vdxVg4vh-m06EUctUdFo3XbbSNKv0Ngf6Rpz-ZVscs8ItoHTT9dJUNyjdQk6j48PCcxC3wVIRlbi3R1Lqn2PNoPlV41jAuH-uVuwBKdlXfG_ZdE5xwoO7y8xHgaCz-I4O5oBfbPuIkTWQmn3xJ-w2lMQCk-3_aWCi09P0PUDwgLy3dHyIBZFUdJ"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary px-3 py-1 rounded-full text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                Doğrulanmış
+                            </div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-primary hover:bg-white transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="p-stack-sm flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-label-sm text-on-secondary-container bg-secondary-container/20 px-2 py-0.5 rounded">Spor Salonu</span>
+<h3 class="font-headline-md text-[20px] text-primary mt-1 group-hover:text-primary-container transition-colors">Titanium Fitness Club</h3>
+</div>
+<div class="flex items-center gap-1 bg-tertiary-fixed text-on-tertiary-fixed px-2 py-1 rounded-lg">
+<span class="font-bold text-label-md">4.7</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-label-md">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                Yenişehir, Mersin
+                            </div>
+<div class="mt-4 pt-4 border-t border-outline-variant flex items-center justify-between">
+<span class="text-label-sm text-secondary font-semibold flex items-center gap-1">
+<span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    Şu an açık
+                                </span>
+<button class="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-on-primary rounded-lg font-label-md transition-all">Detaylar</button>
+</div>
+</div>
+</div>
+<!-- Business Card 6 -->
+<div class="group bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden card-shadow transition-all duration-300 hover:-translate-y-1">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A professional law office or corporate consulting space in Mersin. A sleek boardroom table with leather chairs, large wall-mounted art, and a panoramic window view of the Mersin skyline and coastline. The design is authoritative, corporate, and trustworthy, using navy blue and neutral grey tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGc-KD6urnZ4wnh0ykeUuRdmPlH7vCBYTiAuKKpqVLg2kFzYkT4YN8eTydIHuH472Q29EXH6W-z6bcBhpFX6kVZGnOSixyHP8AVEGvUTroCo3SEF2q3ShJBDGR0Ou9HOXCMn5UCfw5daKTFxFUmKB5u32KQdX9FZjAWxa3_68umFdmGMRUvaH2o3QU9jU9vLaYoPWsO4qPnmDuj7QFUX-cQ2mrbBr-aX6IHScj97gXce_ZzF3UQA1d"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary px-3 py-1 rounded-full text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                Doğrulanmış
+                            </div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-primary hover:bg-white transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<div class="p-stack-sm flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-label-sm text-on-secondary-container bg-secondary-container/20 px-2 py-0.5 rounded">Hizmet</span>
+<h3 class="font-headline-md text-[20px] text-primary mt-1 group-hover:text-primary-container transition-colors">Mersin Hukuk &amp; Danışmanlık</h3>
+</div>
+<div class="flex items-center gap-1 bg-tertiary-fixed text-on-tertiary-fixed px-2 py-1 rounded-lg">
+<span class="font-bold text-label-md">5.0</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-label-md">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                Akdeniz, Mersin
+                            </div>
+<div class="mt-4 pt-4 border-t border-outline-variant flex items-center justify-between">
+<span class="text-label-sm text-secondary font-semibold flex items-center gap-1">
+<span class="w-2 h-2 bg-secondary rounded-full"></span>
+                                    Şu an açık
+                                </span>
+<button class="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-on-primary rounded-lg font-label-md transition-all">Detaylar</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-stack-lg flex items-center justify-center gap-2">
+<button class="w-10 h-10 rounded-lg border border-outline-variant flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-lg bg-primary text-on-primary font-bold">1</button>
+<button class="w-10 h-10 rounded-lg border border-outline-variant flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors">2</button>
+<button class="w-10 h-10 rounded-lg border border-outline-variant flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors">3</button>
+<span class="px-2">...</span>
+<button class="w-10 h-10 rounded-lg border border-outline-variant flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors">12</button>
+<button class="w-10 h-10 rounded-lg border border-outline-variant flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant w-full mt-stack-lg py-stack-lg">
+<div class="px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="flex flex-col gap-4">
+<a class="font-headline-lg text-headline-lg font-black text-primary" href="#">Şehir Paneli</a>
+<p class="text-body-md text-on-surface-variant">Mersin'in dijital rehberi. Şehrinizdeki her şeyi keşfedin, deneyimleyin ve paylaşın.</p>
+<div class="flex gap-4 mt-2">
+<a class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center hover:opacity-90 transition-opacity" href="#">
+<span class="material-symbols-outlined text-[18px]">face_nod</span>
+</a>
+<a class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center hover:opacity-90 transition-opacity" href="#">
+<span class="material-symbols-outlined text-[18px]">public</span>
+</a>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<h4 class="font-label-md text-primary uppercase tracking-wider">Kurumsal</h4>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Hakkımızda</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">İşletme Kaydı</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Sıkça Sorulan Sorular</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">İletişim</a>
+</div>
+<div class="flex flex-col gap-3">
+<h4 class="font-label-md text-primary uppercase tracking-wider">Hızlı Erişim</h4>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Popüler Restoranlar</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">En Yeni Kampanyalar</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Mersin Etkinlik Takvimi</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Haftalık Bülten</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-label-md text-primary uppercase tracking-wider">Yasal</h4>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Kullanım Koşulları</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Gizlilik Politikası</a>
+<div class="mt-4 p-4 bg-surface-container-low rounded-xl">
+<p class="text-label-sm text-on-surface-variant leading-relaxed">© 2024 Şehir Paneli. Tüm hakları saklıdır. Mersin'in dijital rehberi.</p>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for filter toggles
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if(this.checked) {
+                    this.parentElement.classList.add('text-primary');
+                } else {
+                    this.parentElement.classList.remove('text-primary');
+                }
+            });
+        });
+    </script>
+</body></html>
