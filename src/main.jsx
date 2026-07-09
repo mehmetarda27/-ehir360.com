@@ -83,6 +83,13 @@ async function apiFetch(path, options = {}) {
   return data;
 }
 
+async function fetchJson(path) {
+  const response = await fetch(path, { headers: { "Content-Type": "application/json" } });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.message || `${path} yuklenemedi`);
+  return data;
+}
+
 function useCity() {
   return useContext(CityContext);
 }
@@ -306,8 +313,8 @@ function Home() {
 }
 
 function AppDataProvider({ children }) {
-  const [businessList, setBusinessList] = useState(seedBusinesses);
-  const [categoryList, setCategoryList] = useState(seedCategories);
+  const [businessList, setBusinessList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
   const [users, setUsers] = useState(() => {
     const saved = getStored("sehir-paneli-users", []);
     return [...defaultUsers, ...saved.filter((item) => !defaultUsers.some((user) => user.email === item.email))];
@@ -325,7 +332,15 @@ function AppDataProvider({ children }) {
       if (!Array.isArray(data.businesses)) throw new Error("Isletme API yaniti gecersiz");
       setBusinessList(data.businesses);
     } catch (error) {
-      console.warn("Isletme verisi API'den alinamadi, fallback veri korunuyor.", error);
+      console.warn("Isletme verisi API'den alinamadi, statik DB snapshot deneniyor.", error);
+      try {
+        const snapshot = await fetchJson("/db-snapshot.json");
+        const rows = Array.isArray(snapshot.businesses) ? snapshot.businesses : seedBusinesses;
+        setBusinessList(rows);
+      } catch (snapshotError) {
+        console.warn("Statik DB snapshot yuklenemedi, son fallback korunuyor.", snapshotError);
+        setBusinessList(seedBusinesses);
+      }
     }
   };
 
@@ -335,7 +350,26 @@ function AppDataProvider({ children }) {
       if (!Array.isArray(data.categories)) throw new Error("Kategori API yaniti gecersiz");
       setCategoryList(data.categories);
     } catch (error) {
-      console.warn("Kategori verisi API'den alinamadi, fallback veri korunuyor.", error);
+      console.warn("Kategori verisi API'den alinamadi, statik DB snapshot deneniyor.", error);
+      try {
+        const snapshot = await fetchJson("/db-snapshot.json");
+        if (Array.isArray(snapshot.categories)) {
+          const businesses = Array.isArray(snapshot.businesses) ? snapshot.businesses : [];
+          setCategoryList(snapshot.categories.map((category) => ({
+            ...category,
+            count: businesses.filter((business) => (
+              business.categoryId === category.id ||
+              business.categorySlug === category.slug ||
+              slugify(business.category) === slugify(category.name)
+            )).length
+          })));
+        } else {
+          setCategoryList(seedCategories);
+        }
+      } catch (snapshotError) {
+        console.warn("Statik DB snapshot yuklenemedi, son kategori fallback korunuyor.", snapshotError);
+        setCategoryList(seedCategories);
+      }
     }
   };
 
