@@ -817,17 +817,29 @@ function HomeFeed() {
       </div>
       <div>
         <h2>Yeni eklenenler</h2>
-        <div className="mini-list">{businesses.slice(3, 7).map((b) => <Link to={`/business/${b.slug}`} key={b.id}><img src={b.image} alt={b.name} /><div><b>{b.name}</b><small>{b.category} · {b.district}</small></div><Badge tone="green">Yeni</Badge></Link>)}</div>
+        <div className="mini-list">{businesses.slice(3, 7).map((b) => <Link to={`/business/${b.slug}`} key={b.id}><img src={getBusinessImage(b)} alt={b.name} /><div><b>{b.name}</b><small>{b.category} · {b.district}</small></div><Badge tone="green">Yeni</Badge></Link>)}</div>
       </div>
     </section>
   );
+}
+
+function getBusinessImage(business) {
+  return business.image || business.cover || business.logo || business.gallery?.[0] || business.photos?.[0] || "";
+}
+
+function getBusinessCover(business) {
+  return business.cover || business.image || business.gallery?.[0] || business.photos?.[0] || business.logo || "";
+}
+
+function getBusinessLogo(business) {
+  return business.logo || business.image || business.gallery?.[0] || business.photos?.[0] || business.cover || "";
 }
 
 function BusinessCard({ business }) {
   return (
     <article className="business-card">
       <div className="card-media">
-        <img src={business.image} alt={business.name} />
+        <img src={getBusinessImage(business)} alt={business.name} />
         <div className="media-badges">
           {business.verified && <Badge tone="green"><ShieldCheck size={14} /> Doğrulanmış</Badge>}
           {business.sponsored && <Badge tone="gold"><Sparkles size={14} /> Sponsorlu</Badge>}
@@ -909,13 +921,15 @@ function BusinessDetail() {
 
   const services = business.services?.length ? business.services : [];
   const hours = business.hours?.length ? business.hours : business.openingHours?.map((line) => ({ day: line.split(":")[0], time: line.split(":").slice(1).join(":").trim() })) || [];
-  const gallery = business.gallery?.length ? business.gallery : business.photos || [];
+  const gallery = business.gallery?.length ? business.gallery : business.photos?.length ? business.photos : [getBusinessImage(business)].filter(Boolean);
+  const cover = getBusinessCover(business);
+  const logo = getBusinessLogo(business);
   setMeta(`${business.name} | Şehir360`, `${business.name} adres, telefon, yorumlar, kampanyalar ve çalışma saatleri.`);
   return (
     <PageShell>
       <section className="container detail-page">
-        <div className="detail-hero" style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,.1), rgba(0,35,111,.86)), url(${business.cover})` }}>
-          <img className="detail-logo" src={business.logo} alt={`${business.name} logo`} />
+        <div className="detail-hero" style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,.1), rgba(0,35,111,.86)), url(${cover})` }}>
+          <img className="detail-logo" src={logo} alt={`${business.name} logo`} />
           <div>
             <div className="detail-badges"><Badge tone="green"><ShieldCheck size={14} /> Doğrulanmış</Badge>{business.sponsored && <Badge tone="gold">Sponsorlu</Badge>}</div>
             <h1>{business.name}</h1>
